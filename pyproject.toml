@@ -1,0 +1,49 @@
+[project]
+name = "antonyms-and-synonyms"
+version = "1.0.0"
+description = "Research pipeline: detecting geometric structure in word embedding difference vectors of synonym and antonym pairs"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Rami Luisto"}]
+keywords = ["NLP", "word-embeddings", "synonyms", "antonyms", "semantic-analysis", "UMAP"]
+
+dependencies = [
+    "numpy>=1.23.5,<2.3.0",
+    "pandas>=1.5.0",
+    "scikit-learn>=1.2.0",
+    "torch>=2.0.0",
+    "transformers>=4.30.0",
+    "matplotlib>=3.6.0",
+    "scipy>=1.10.0",
+    "seaborn>=0.12.0",
+    "joblib>=1.2.0",
+    "gensim>=4.3.0",
+    "umap-learn>=0.5.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-timeout>=2.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["semsim"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = ["-ra", "-q", "--tb=short", "--timeout=60", "--timeout-method=thread"]
+filterwarnings = [
+    "ignore::DeprecationWarning:transformers.*",
+    "ignore::FutureWarning:torch.*",
+]

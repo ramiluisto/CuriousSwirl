@@ -205,3 +205,38 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# ============================================================================
+# Project-specific ignores
+# ============================================================================
+
+# Generated results (reproducible via pipeline)
+results/embeddings/
+results/pairs/
+results/statistics/
+results/classification/
+results/cluster_classification/
+results/projections/
+results/confounder/
+results/tagging/
+results/base_word_analysis/
+results/persistent_homology/
+results/synthetic_shapes/
+results/reports/
+
+# Large downloadable files
+data/glove_file/
+
+# Streamlit cache (not used in shareable version)
+data/streamlit_image_cache/
+
+# LaTeX build artifacts
+prose/*.aux
+prose/*.bbl
+prose/*.blg
+prose/*.fdb_latexmk
+prose/*.fls
+prose/*.log
+prose/*.out
+prose/*.synctex.gz
+prose/*.pdf

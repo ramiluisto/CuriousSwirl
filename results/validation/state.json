@@ -1,0 +1,74 @@
+[
+  {
+    "batch_id": "msgbatch_017X6w8rDFyFuzEXtknDjRHK",
+    "provider": "anthropic",
+    "claimed_type": "synonym",
+    "series": "A",
+    "status": "completed",
+    "submitted_at": 1771930936.532896,
+    "output_path": ""
+  },
+  {
+    "batch_id": "msgbatch_01PnU38JDsqFyZm65JdQ8ZTx",
+    "provider": "anthropic",
+    "claimed_type": "synonym",
+    "series": "B",
+    "status": "completed",
+    "submitted_at": 1771930938.865385,
+    "output_path": ""
+  },
+  {
+    "batch_id": "msgbatch_01RF7JxDsHs9b7FvunPps9aa",
+    "provider": "anthropic",
+    "claimed_type": "antonym",
+    "series": "A",
+    "status": "completed",
+    "submitted_at": 1771930940.501739,
+    "output_path": ""
+  },
+  {
+    "batch_id": "msgbatch_01P4gKRSUaUZ7J6MnjZ8FKBz",
+    "provider": "anthropic",
+    "claimed_type": "antonym",
+    "series": "B",
+    "status": "completed",
+    "submitted_at": 1771930942.754282,
+    "output_path": ""
+  },
+  {
+    "batch_id": "batch_699eefa814b881909c4ce25b9377fd58",
+    "provider": "openai",
+    "claimed_type": "synonym",
+    "series": "A",
+    "status": "completed",
+    "submitted_at": 1772023720.3203049,
+    "output_path": ""
+  },
+  {
+    "batch_id": "batch_699eefa98a748190a6a7831a2c13b98e",
+    "provider": "openai",
+    "claimed_type": "synonym",
+    "series": "B",
+    "status": "completed",
+    "submitted_at": 1772023721.759169,
+    "output_path": ""
+  },
+  {
+    "batch_id": "batch_699eefaa9ebc81908a3e44e60f67393e",
+    "provider": "openai",
+    "claimed_type": "antonym",
+    "series": "A",
+    "status": "completed",
+    "submitted_at": 1772023722.884259,
+    "output_path": ""
+  },
+  {
+    "batch_id": "batch_699eefac1a4881908506190840baefd3",
+    "provider": "openai",
+    "claimed_type": "antonym",
+    "series": "B",
+    "status": "completed",
+    "submitted_at": 1772023724.320213,
+    "output_path": ""
+  }
+]
