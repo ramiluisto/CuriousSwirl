@@ -20,8 +20,10 @@ OPENAI_EMBEDDINGS_DIR = DATA_DIR / "OpenAI_embeddings"
 PAIRS_DIR = RESULTS_DIR / "pairs"
 FILTERED_PAIRS_DIR = RESULTS_DIR / "filtered_pairs"
 STATISTICS_DIR = RESULTS_DIR / "statistics"
+CLASSIFICATION_DIR = RESULTS_DIR / "classification"
 PROJECTIONS_DIR = RESULTS_DIR / "projections"
 VALIDATION_DIR = RESULTS_DIR / "validation"
+IMAGES_DIR = RESULTS_DIR / "images"
 
 STREAMLIT_CACHE_DIR = DATA_DIR / "streamlit_image_cache"
 STREAMLIT_PROJECTION_CACHE_DIR = STREAMLIT_CACHE_DIR / "projections"
@@ -158,7 +160,9 @@ def ensure_directories():
         PAIRS_DIR,
         FILTERED_PAIRS_DIR,
         STATISTICS_DIR,
+        CLASSIFICATION_DIR,
         PROJECTIONS_DIR,
         VALIDATION_DIR,
+        IMAGES_DIR,
     ]:
         d.mkdir(parents=True, exist_ok=True)

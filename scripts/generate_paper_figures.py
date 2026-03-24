@@ -13,7 +13,10 @@ Usage:
 import argparse
 import logging
 import sys
+import warnings
 from pathlib import Path
+
+warnings.filterwarnings("ignore", category=RuntimeWarning, message=".*encountered in matmul.*")
 
 import matplotlib
 matplotlib.use("Agg")
@@ -68,7 +71,7 @@ POINT_ALPHA = 0.45
 POINT_SIZE = 6
 BG_COLOR = "#fafafa"
 
-OUTPUT_DIR = PROJECT_ROOT / "prose" / "img"
+OUTPUT_DIR = PROJECT_ROOT / "results" / "images"
 
 
 def _style_ax(ax, title=None, show_axes=True):

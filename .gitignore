@@ -215,7 +215,9 @@ results/embeddings/
 results/filtered_pairs/
 results/pairs/
 results/statistics/
+results/classification/
 results/projections/
+results/images/
 results/stuttgart_processed.csv
 results/vocabulary.txt
 

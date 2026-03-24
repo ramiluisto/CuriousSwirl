@@ -28,8 +28,10 @@ def test_ensure_directories_creates_only_release_dirs(tmp_path, monkeypatch):
     monkeypatch.setattr(config, "PAIRS_DIR", tmp_path / "pairs")
     monkeypatch.setattr(config, "FILTERED_PAIRS_DIR", tmp_path / "filtered_pairs")
     monkeypatch.setattr(config, "STATISTICS_DIR", tmp_path / "statistics")
+    monkeypatch.setattr(config, "CLASSIFICATION_DIR", tmp_path / "classification")
     monkeypatch.setattr(config, "PROJECTIONS_DIR", tmp_path / "projections")
     monkeypatch.setattr(config, "VALIDATION_DIR", tmp_path / "validation")
+    monkeypatch.setattr(config, "IMAGES_DIR", tmp_path / "images")
     monkeypatch.setattr(config, "STREAMLIT_PROJECTION_CACHE_DIR", tmp_path / "streamlit" / "projections")
     monkeypatch.setattr(config, "STREAMLIT_GRID_CACHE_DIR", tmp_path / "streamlit" / "grids")
 
@@ -39,8 +41,10 @@ def test_ensure_directories_creates_only_release_dirs(tmp_path, monkeypatch):
     assert (tmp_path / "pairs").exists()
     assert (tmp_path / "filtered_pairs").exists()
     assert (tmp_path / "statistics").exists()
+    assert (tmp_path / "classification").exists()
     assert (tmp_path / "projections").exists()
     assert (tmp_path / "validation").exists()
+    assert (tmp_path / "images").exists()
     assert not (tmp_path / "streamlit").exists()
 
 
@@ -61,9 +65,9 @@ def test_extract_embeddings_skips_missing_glove(monkeypatch):
         sys.argv = original_argv
 
 
-def test_cosine_plot_targets_paper_image_path():
+def test_cosine_plot_targets_results_images_path():
     module = load_script_module("generate_cosine_plots_script", "scripts/generate_cosine_sim_plots.py")
-    assert module.OUT_PATH == PROJECT_ROOT / "prose" / "img" / "cosine_violin_grid.png"
+    assert module.OUT_PATH == PROJECT_ROOT / "results" / "images" / "cosine_violin_grid.png"
 
 
 def test_paper_figure_helpers_write_tex_filenames(tmp_path, monkeypatch):

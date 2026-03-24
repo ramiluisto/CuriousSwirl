@@ -14,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from config import PROJECT_ROOT
 
 STATS_DIR = PROJECT_ROOT / "results" / "statistics"
-OUT_PATH = PROJECT_ROOT / "prose" / "img" / "cosine_violin_grid.png"
+OUT_PATH = PROJECT_ROOT / "results" / "images" / "cosine_violin_grid.png"
 
 MODELS = [
     ("word2vec", "Word2Vec"),

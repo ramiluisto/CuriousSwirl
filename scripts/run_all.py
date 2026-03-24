@@ -29,6 +29,7 @@ SCRIPTS = [
     "02_extract_embeddings.py",
     "03_generate_pairs.py",
     "04_compute_statistics.py",
+    "05_classify_demo.py",
     "06_compute_projections.py",
 ]
 

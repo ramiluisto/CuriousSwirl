@@ -5,6 +5,9 @@ import os
 os.environ.setdefault("OMP_NUM_THREADS", "1")  # Prevent thread deadlock
 
 import argparse
+import warnings
+
+warnings.filterwarnings("ignore", category=RuntimeWarning, message=".*encountered in matmul.*")
 import logging
 import sys
 from pathlib import Path
