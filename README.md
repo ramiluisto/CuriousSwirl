@@ -1,6 +1,6 @@
 # Antonyms and Synonyms: Geometric Structure in Word Embedding Difference Vectors
 
-Companion code for the paper *"Hey look at this cool swirl that appears in a sort of specific projection of the difference vectors of the embedding vectors of antonym and synonym pairs!"*
+Companion code for the paper *"A visual observation on the geometry of UMAP projections of the difference vectors of antonym and synonym word pair embeddings"*
 
 This repository reproduces the UMAP projection visualizations showing a consistent "swirl" pattern in the difference vectors of synonym and antonym word embeddings — stable across Word2Vec, GloVe, BERT, and OpenAI embedding models.
 
@@ -131,12 +131,9 @@ pytest tests/
 
 ```bibtex
 @article{luisto2025swirl,
-  title={Hey look at this cool swirl that appears in a sort of specific projection
-         of the difference vectors of the embedding vectors of antonym and synonym pairs!
-         It seems to be stable across different model types so maybe it is not just
-         a projection artefact but represents some real structure?},
+  title={A visual observation on the geometry of UMAP projections of the difference vectors of antonym and synonym word pair embeddings},
   author={Luisto, Rami},
-  year={2025}
+  year={2026}
 }
 ```
 
