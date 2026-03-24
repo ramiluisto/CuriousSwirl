@@ -7,8 +7,8 @@ This repository reproduces the UMAP projection visualizations showing a consiste
 ## Quick Start
 
 ```bash
-python -m venv .venv && source .venv/bin/activate
-pip install -e ".[dev]"
+uv venv && source .venv/bin/activate
+uv pip install -e ".[dev]"
 python scripts/run_all.py
 python scripts/generate_paper_figures.py
 python scripts/generate_cosine_sim_plots.py
@@ -94,7 +94,7 @@ pdflatex HeyLookAtThisSwirl
 ## Running Tests
 
 ```bash
-pip install -e ".[dev]"
+uv pip install -e ".[dev]"
 pytest tests/
 ```
 
