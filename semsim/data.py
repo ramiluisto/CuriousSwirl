@@ -145,28 +145,3 @@ def filter_pairs_to_vocabulary(
     return filtered
 
 
-def load_curated_antonyms(opposites_dir: Path) -> List[Tuple[str, str]]:
-    """Load curated antonym pairs from the opposites directory.
-
-    Reads CSV files with _word and _opposite columns.
-    """
-    pairs: List[Tuple[str, str]] = []
-    seen: Set[Tuple[str, str]] = set()
-
-    for csv_path in sorted(opposites_dir.glob("*.csv")):
-        try:
-            df = pd.read_csv(csv_path)
-        except Exception as e:
-            logger.warning("Failed to read %s: %s", csv_path, e)
-            continue
-
-        if "_word" in df.columns and "_opposite" in df.columns:
-            for _, row in df.iterrows():
-                pair = (str(row["_word"]), str(row["_opposite"]))
-                canonical = tuple(sorted(pair))
-                if canonical not in seen:
-                    seen.add(canonical)
-                    pairs.append(pair)
-
-    logger.info("Loaded %d curated antonym pairs from %s", len(pairs), opposites_dir)
-    return pairs

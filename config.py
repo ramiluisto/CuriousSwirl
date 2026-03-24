@@ -12,8 +12,6 @@ DATA_DIR = PROJECT_ROOT / "data"
 RESULTS_DIR = PROJECT_ROOT / "results"
 
 STUTTGART_DIR = DATA_DIR / "stuttgart"
-WORDNET_PATH = DATA_DIR / "wordnet_curated" / "wordnet_pruned_checked.csv"
-OPPOSITES_DIR = DATA_DIR / "opposites"
 
 EMBEDDINGS_DIR = RESULTS_DIR / "embeddings"
 OPENAI_EMBEDDINGS_DIR = DATA_DIR / "OpenAI_embeddings"
@@ -60,10 +58,6 @@ OPENAI_MODELS = ["text-embedding-3-small", "text-embedding-3-large"]
 PAIR_TYPES: List[str] = ["synonyms", "antonyms", "shuffled_synonym_words", "shuffled_antonym_words"]
 SEMANTIC_PAIR_TYPES: List[str] = ["synonyms", "antonyms"]
 BASELINE_PAIR_TYPES: List[str] = ["shuffled_synonym_words", "shuffled_antonym_words"]
-
-ANTONYM_PREFIXES: List[str] = [
-    "un", "in", "im", "ir", "il", "dis", "non", "anti", "de", "mis",
-]
 
 PAIR_GENERATION_CONFIG = {
     "random_state": 42,
