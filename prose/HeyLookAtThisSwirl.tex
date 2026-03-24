@@ -95,8 +95,8 @@
   }%
 }
 
-%\title{A visual observation on the geometry of UMAP projections of the differences of embedding vectors of antonym and synonym pairs}
-\title{Hey look at this cool swirl \swirl{} that appears in a sort of specific projection of the difference vectors of the embedding vectors of antonym and synonym pairs! It seems to be stable across different model types so maybe it is not just a projection artefact but represents some real structure?}
+\title{A visual observation on the geometry of UMAP projections of the difference vectors of antonym and synonym word pair embeddings}
+%\title{Hey look at this cool swirl \swirl{} that appears in a sort of specific projection of the difference vectors of the embedding vectors of antonym and synonym pairs! It seems to be stable across different model types so maybe it is not just a projection artefact but represents some real structure?}
 \author{$\R$ami Luisto\thanks{%
   Faculty of Information Technology, University of Jyv\"askyl\"a, Jyv\"askyl\"a;
   HUS Helsinki University Hospital, Helsinki;
@@ -131,6 +131,8 @@ With the embedding vectors we studied both their differences and their concatena
 
 Besides our report on ``the swirl'' we observe, we also note that the projections can be used to produce a transductive classifier that performs on par with SOTA methods in the Antonym Synonym Differentiation (ASD) task, though with some caveats. We discuss this briefly in Section \ref{sec:classification}.
 
+
+The source code for this paper and the scripts that can be used to replicate the Swirl are available at \url{https://github.com/ramiluisto/CuriousSwirl.git}.
 
 % Another direction of research would be to study the so called \emph{attention mechanisms} of the BERT model, see e.g.\ \cite{Samenko2020ICM}.
 
