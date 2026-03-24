@@ -212,23 +212,21 @@ __marimo__/
 
 # Generated results (reproducible via pipeline)
 results/embeddings/
+results/filtered_pairs/
 results/pairs/
 results/statistics/
-results/classification/
-results/cluster_classification/
 results/projections/
-results/confounder/
-results/tagging/
-results/base_word_analysis/
-results/persistent_homology/
-results/synthetic_shapes/
-results/reports/
+results/stuttgart_processed.csv
+results/vocabulary.txt
 
 # Large downloadable files
-data/glove_file/
+data/glove/
 
 # Streamlit cache (not used in shareable version)
 data/streamlit_image_cache/
+
+# Legacy local plot output
+prose/img/cosine_sims/
 
 # LaTeX build artifacts
 prose/*.aux

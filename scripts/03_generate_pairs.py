@@ -30,10 +30,14 @@ logger = logging.getLogger(__name__)
 
 
 def _load_validated_pairs(claimed_type: str):
-    """Load validated pairs from Phase 1b output."""
+    """Load validated pairs from the bundled validation outputs."""
     path = VALIDATION_DIR / f"{claimed_type}s_validated.json"
     if not path.exists():
-        logger.error("Validated pairs not found: %s (run 01b filter first)", path)
+        logger.error(
+            "Validated pairs not found at %s. "
+            "This shareable repo expects the pre-computed files in results/validation/.",
+            path,
+        )
         sys.exit(1)
     with open(path) as f:
         pairs = json.load(f)

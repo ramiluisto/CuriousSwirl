@@ -1,7 +1,4 @@
-"""
-Configuration for the Antonyms and Synonyms research project.
-Defines paths, model configs, pair types, and experimental parameters.
-"""
+"""Configuration for the shareable paper reproduction workflow."""
 
 from pathlib import Path
 from typing import Dict, List
@@ -23,16 +20,8 @@ OPENAI_EMBEDDINGS_DIR = DATA_DIR / "OpenAI_embeddings"
 PAIRS_DIR = RESULTS_DIR / "pairs"
 FILTERED_PAIRS_DIR = RESULTS_DIR / "filtered_pairs"
 STATISTICS_DIR = RESULTS_DIR / "statistics"
-CLASSIFICATION_DIR = RESULTS_DIR / "classification"
 PROJECTIONS_DIR = RESULTS_DIR / "projections"
-CONFOUNDER_DIR = RESULTS_DIR / "confounder"
 VALIDATION_DIR = RESULTS_DIR / "validation"
-TAGGING_DIR = RESULTS_DIR / "tagging"
-BASE_WORD_DIR = RESULTS_DIR / "base_word_analysis"
-PERSISTENT_HOMOLOGY_DIR = RESULTS_DIR / "persistent_homology"
-SYNTHETIC_SHAPES_DIR = RESULTS_DIR / "synthetic_shapes"
-CLUSTER_CLASSIFICATION_DIR = RESULTS_DIR / "cluster_classification"
-REPORTS_DIR = RESULTS_DIR / "reports"
 
 STREAMLIT_CACHE_DIR = DATA_DIR / "streamlit_image_cache"
 STREAMLIT_PROJECTION_CACHE_DIR = STREAMLIT_CACHE_DIR / "projections"
@@ -62,8 +51,6 @@ TRANSFORMER_MODELS = ["bert-base-cased"]
 STATIC_MODELS = ["word2vec", "glove"]
 OPENAI_MODELS = ["text-embedding-3-small", "text-embedding-3-large"]
 
-PH_EXCLUDED_MODELS: set = set(OPENAI_MODELS)
-
 # =============================================================================
 # Pair Types
 # =============================================================================
@@ -78,44 +65,6 @@ ANTONYM_PREFIXES: List[str] = [
 
 PAIR_GENERATION_CONFIG = {
     "random_state": 42,
-}
-
-# =============================================================================
-# Classification
-# =============================================================================
-
-CLASSIFICATION_CONFIG = {
-    "input_types": ["difference", "concatenation", "difference_sym", "concatenation_sym"],
-    "test_size": 0.2,
-    "random_state": 42,
-    "max_iter": 1000,
-    "nn_hidden_dim": 64,
-    "nn_epochs": 100,
-    "nn_batch_size": 64,
-    "nn_learning_rate": 1e-3,
-    "nn_patience": 10,
-}
-
-CLASSIFICATION_TASKS = {
-    "pairwise": [
-        ("synonyms", "antonyms"),
-        ("synonyms", "shuffled_synonym_words"),
-        ("antonyms", "shuffled_antonym_words"),
-        ("synonyms", "shuffled_antonym_words"),
-        ("antonyms", "shuffled_synonym_words"),
-        ("shuffled_synonym_words", "shuffled_antonym_words"),
-    ],
-    "multiclass": PAIR_TYPES,
-}
-
-# =============================================================================
-# Plotting
-# =============================================================================
-
-PLOT_CONFIG = {
-    "dpi": 300,
-    "format": "png",
-    "figsize": (10, 6),
 }
 
 # =============================================================================
@@ -174,58 +123,6 @@ PROJECTION_CONFIG = {
     "umap": {"n_neighbors": 50, "min_dist": 0.01},
 }
 
-HYPERPARAMETER_GRID_CONFIG = {
-    "tsne": {
-        "perplexity": [5, 15, 30, 50],
-        "max_iter": [250, 500, 1000, 2000],
-    },
-    "umap": {
-        "n_neighbors": [5, 15, 30, 50],
-        "min_dist": [0.01, 0.1, 0.25, 0.5],
-    },
-}
-
-PERSISTENT_HOMOLOGY_CONFIG = {
-    "input_types": ["difference", "concatenation"],
-    "n_landmarks": 300,
-    "subsampling": "maxmin",   # "maxmin" or "random"
-    "metric": "cosine",
-    "max_dim": 2,              # H0, H1, and H2
-    "seed": 42,
-}
-
-CLUSTER_CLASSIFICATION_CONFIG = {
-    "input_types": ["difference"],
-    "test_size": 0.2,
-    "random_state": 42,
-    "projections": [None, "umap_2d", "umap_3d"],
-    "umap_defaults": {"n_neighbors": 15, "min_dist": 0.1},
-    "cluster_methods": ["hdbscan", "kmeans"],
-    "straggler_modes": ["nearest", "noise_class"],
-    "hdbscan_defaults": {"min_cluster_size": 15, "min_samples": 5},
-}
-
-SYNTHETIC_SHAPES_CONFIG = {
-    "default_n_points": 1000,
-    "default_noise_sigma": 0.01,
-    "default_seed": 42,
-    "target_dimensions": [32, 64, 128, 512, 768, 1024],
-    "default_target_dim": 768,
-    "n_pairs_for_metrics": 2000,
-    "max_recipe_depth": 4,
-    "ph": {
-        "n_landmarks": 300,
-        "subsampling": "maxmin",
-        "metric": "euclidean",
-        "max_dim": 2,
-    },
-    "projections": {
-        "pca_max_components": 50,
-        "tsne_perplexity": 30,
-        "umap_n_neighbors": 15,
-    },
-}
-
 # =============================================================================
 # Utilities
 # =============================================================================
@@ -254,20 +151,14 @@ def get_projection_path(model_name: str, input_type: str, method: str, n_dims: i
     return PROJECTIONS_DIR / f"{get_model_slug(model_name)}_{input_type}_{method}_{n_dims}d.npz"
 
 
-def get_ph_output_dir(model_name: str, pair_type: str, input_type: str) -> Path:
-    slug = get_model_slug(model_name)
-    return PERSISTENT_HOMOLOGY_DIR / slug / f"{pair_type}_{input_type}"
-
-
-def get_synthetic_shape_dir(shape_name: str) -> Path:
-    return SYNTHETIC_SHAPES_DIR / shape_name
-
-
 def ensure_directories():
-    for d in [EMBEDDINGS_DIR, PAIRS_DIR, FILTERED_PAIRS_DIR, STATISTICS_DIR,
-              CLASSIFICATION_DIR, CLUSTER_CLASSIFICATION_DIR,
-              PROJECTIONS_DIR, CONFOUNDER_DIR,
-              VALIDATION_DIR, TAGGING_DIR, BASE_WORD_DIR,
-              PERSISTENT_HOMOLOGY_DIR, SYNTHETIC_SHAPES_DIR, REPORTS_DIR,
-              STREAMLIT_PROJECTION_CACHE_DIR, STREAMLIT_GRID_CACHE_DIR]:
+    """Create only the directories used by the shareable paper pipeline."""
+    for d in [
+        EMBEDDINGS_DIR,
+        PAIRS_DIR,
+        FILTERED_PAIRS_DIR,
+        STATISTICS_DIR,
+        PROJECTIONS_DIR,
+        VALIDATION_DIR,
+    ]:
         d.mkdir(parents=True, exist_ok=True)

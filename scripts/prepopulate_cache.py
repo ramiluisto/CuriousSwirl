@@ -2,8 +2,9 @@
 """
 Pre-populate the Streamlit projection cache.
 
-Batch-generates projections for a sweep of models, datasets, and hyperparameters
-so the Streamlit dashboard loads instantly.
+This script is optional and not required for the paper reproduction workflow.
+It batch-generates projections for a sweep of models, datasets, and
+hyperparameters so the legacy dashboard cache loads instantly.
 
 Usage:
     # Dry run (show what would be computed)
@@ -28,23 +29,16 @@ import sys
 import time
 from pathlib import Path
 
-import numpy as np
-from sklearn.preprocessing import StandardScaler
-
-# Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from config import (
     MODELS,
     PAIR_TYPES,
-    PAIRS_DIR,
     PROJECTION_CONFIG,
     get_model_slug,
-    get_pair_path,
     ensure_directories,
 )
-from semsim.classify import build_features, symmetrize_features
-from semsim.pairs import load_pairs_with_embeddings
+from semsim.figure_data import load_features_for_dataset
 from semsim.projections import compute_projection
 from semsim.projection_cache import (
     build_projection_params,
@@ -70,7 +64,7 @@ SWEEP_MODELS = [
     "text-embedding-3-large",
 ]
 
-SWEEP_DATASETS = ["unfiltered", "validated_3.0", "threshold_4.0"]
+SWEEP_DATASETS = ["unfiltered", "validated_3.0"]
 
 UMAP_GRID = {
     "n_neighbors": [5, 10, 15, 30, 50, 100, 150],
@@ -90,100 +84,11 @@ DEFAULT_METRIC = "euclidean"
 DEFAULT_SYMMETRIZE = False
 
 
-def get_pairs_dir_for_dataset(dataset: str) -> Path:
-    """Return the pairs directory for a dataset key."""
-    if dataset == "validated_3.0":
-        return PAIRS_DIR
-    elif dataset == "unfiltered":
-        from config import FILTERED_PAIRS_DIR
-        return FILTERED_PAIRS_DIR
-    elif dataset.startswith("threshold_"):
-        threshold = dataset.replace("threshold_", "")
-        return Path("prose/filtering_reports") / f"threshold_{threshold}" / "pairs"
-    else:
-        raise ValueError(f"Unknown dataset: {dataset}")
-
-
-def load_features_for_dataset(
-    model_name: str, dataset: str, pair_types: list,
-    input_type: str, symmetrize: bool, standardize: bool,
-):
-    """Load and prepare feature matrix for a model+dataset combination.
-
-    Returns (X, labels, words1, words2) or None if no data available.
-    """
-    slug = get_model_slug(model_name)
-
-    if dataset == "unfiltered":
-        try:
-            from semsim.unfiltered import load_unfiltered_pairs_for_model
-            data = load_unfiltered_pairs_for_model(model_name)
-        except Exception as e:
-            logger.warning("Cannot load unfiltered data for %s: %s", model_name, e)
-            return None
-
-        all_labels, all_words1, all_words2, all_vecs = [], [], [], []
-        for pt in pair_types:
-            if pt not in data:
-                continue
-            pairs, emb_pairs, _meta, _splits = data[pt]
-            X = build_features(emb_pairs, input_type)
-            if len(X) == 0:
-                continue
-            if symmetrize:
-                X = symmetrize_features(X, input_type)
-                doubled = list(pairs) + list(pairs)
-                for p in doubled:
-                    all_words1.append(p[0])
-                    all_words2.append(p[1])
-                all_labels.extend([pt] * len(X))
-            else:
-                for p in pairs:
-                    all_words1.append(p[0])
-                    all_words2.append(p[1])
-                all_labels.extend([pt] * len(X))
-            all_vecs.append(X)
-    else:
-        pairs_dir = get_pairs_dir_for_dataset(dataset)
-        all_labels, all_words1, all_words2, all_vecs = [], [], [], []
-        for pt in pair_types:
-            pair_path = pairs_dir / f"{slug}_{pt}_pairs.json"
-            if not pair_path.exists():
-                continue
-            pairs, emb_pairs, _meta = load_pairs_with_embeddings(pair_path)
-            X = build_features(emb_pairs, input_type)
-            if len(X) == 0:
-                continue
-            if symmetrize:
-                X = symmetrize_features(X, input_type)
-                doubled = list(pairs) + list(pairs)
-                for p in doubled:
-                    all_words1.append(p[0])
-                    all_words2.append(p[1])
-                all_labels.extend([pt] * len(X))
-            else:
-                for p in pairs:
-                    all_words1.append(p[0])
-                    all_words2.append(p[1])
-                all_labels.extend([pt] * len(X))
-            all_vecs.append(X)
-
-    if not all_vecs:
-        return None
-
-    X_all = np.vstack(all_vecs)
-    if standardize:
-        X_all = StandardScaler().fit_transform(X_all)
-
-    return X_all, all_labels, all_words1, all_words2
-
-
 def generate_projection_jobs(models, datasets, methods):
     """Yield (model, dataset, method, method_kwargs, params) tuples."""
     pair_types = list(PAIR_TYPES)
 
     for model in models:
-        slug = get_model_slug(model)
         for dataset in datasets:
             # PCA
             if "pca" in methods:
@@ -293,10 +198,15 @@ def main():
         slug = get_model_slug(model)
         logger.info("Loading features: %s / %s", slug, dataset)
 
-        features = load_features_for_dataset(
-            model, dataset, list(PAIR_TYPES),
-            DEFAULT_INPUT_TYPE, DEFAULT_SYMMETRIZE, DEFAULT_STANDARDIZE,
-        )
+        try:
+            features = load_features_for_dataset(
+                model, dataset, list(PAIR_TYPES),
+                DEFAULT_INPUT_TYPE, DEFAULT_SYMMETRIZE, DEFAULT_STANDARDIZE,
+            )
+        except Exception as exc:
+            logger.warning("Cannot load %s / %s: %s", slug, dataset, exc)
+            skipped += len(method_jobs)
+            continue
         if features is None:
             logger.warning("No data for %s / %s — skipping %d jobs", slug, dataset, len(method_jobs))
             skipped += len(method_jobs)

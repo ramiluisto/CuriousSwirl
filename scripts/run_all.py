@@ -5,8 +5,8 @@ Pre-computed data shipped with this repository:
   - LLM validation results (results/validation/) — skips the expensive 01b step
   - OpenAI embeddings (data/OpenAI_embeddings/) — skips OpenAI API calls
 
-Phase 02 will download BERT (~400 MB), word2vec (~1.7 GB) on first run.
-GloVe requires a manual download — see README.md.
+Phase 02 will download BERT (~400 MB) and word2vec (~1.7 GB) on first run.
+If GloVe is not installed, Phase 02 now skips it with a warning.
 
 After this pipeline completes, generate paper figures with:
   python scripts/generate_paper_figures.py

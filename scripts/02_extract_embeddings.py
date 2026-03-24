@@ -18,6 +18,7 @@ from semsim.embeddings import (
     extract_transformer_embeddings,
     extract_word2vec_embeddings,
     extract_glove_embeddings,
+    get_default_glove_path,
     save_embeddings,
 )
 
@@ -51,18 +52,33 @@ def main():
         logger.info("Extracting embeddings for %s...", model_name)
 
         if model_name in OPENAI_MODELS:
-            logger.info(
-                "OpenAI model %s uses pre-extracted embeddings. "
-                "Run scripts/extract_openai_embeddings.py if needed.",
-                model_name,
-            )
+            if out_path.exists():
+                logger.info("OpenAI model %s uses bundled pre-extracted embeddings at %s", model_name, out_path)
+            else:
+                logger.warning(
+                    "OpenAI model %s has no bundled embeddings at %s; skipping. "
+                    "This shareable repo does not regenerate OpenAI embeddings.",
+                    model_name,
+                    out_path,
+                )
             continue
         elif model_name in TRANSFORMER_MODELS:
             embs = extract_transformer_embeddings(model_name, vocab, device=args.device)
         elif model_name == "word2vec":
             embs = extract_word2vec_embeddings(vocab)
         elif model_name == "glove":
-            glove_path = Path(args.glove_path) if args.glove_path else None
+            if args.glove_path:
+                glove_path = Path(args.glove_path)
+                if not glove_path.exists():
+                    raise FileNotFoundError(f"GloVe file not found at {glove_path}")
+            else:
+                glove_path = get_default_glove_path()
+                if glove_path is None:
+                    logger.warning(
+                        "Skipping glove: no GloVe file found at data/glove/glove.6B.300d.txt "
+                        "or ~/.cache/glove/glove.6B.300d.txt"
+                    )
+                    continue
             embs = extract_glove_embeddings(vocab, glove_path=glove_path)
         else:
             logger.warning("Unknown model: %s", model_name)

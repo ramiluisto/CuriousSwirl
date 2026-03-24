@@ -1,10 +1,4 @@
-"""
-Embedding extraction for all 4 model families:
-- BERT (bert-base-cased)
-- ModernBERT (answerdotai/modernbert-base)
-- word2vec (via gensim)
-- GloVe (parse text file)
-"""
+"""Embedding loading and extraction for the paper's model families."""
 
 import json
 import logging
@@ -15,6 +9,18 @@ from typing import Dict, List, Optional, Set
 import numpy as np
 
 logger = logging.getLogger(__name__)
+
+
+def get_default_glove_path() -> Optional[Path]:
+    """Return the first supported GloVe path if available."""
+    candidates = [
+        Path.home() / ".cache" / "glove" / "glove.6B.300d.txt",
+        Path("data") / "glove" / "glove.6B.300d.txt",
+    ]
+    for path in candidates:
+        if path.exists():
+            return path
+    return None
 
 
 def load_embeddings(path: Path) -> Dict[str, np.ndarray]:
@@ -47,7 +53,7 @@ def save_embeddings(embeddings: Dict[str, np.ndarray], path: Path) -> None:
     logger.info("Saved %d embeddings (dim=%d) to %s", len(embeddings), dim, path)
 
 
-# ---- Transformer models (BERT, ModernBERT) ----
+# ---- Transformer models ----
 
 def extract_transformer_embeddings(
     model_name: str,
@@ -165,19 +171,12 @@ def extract_glove_embeddings(
         glove_path: Path to glove.6B.300d.txt. If None, looks in standard locations.
     """
     if glove_path is None:
-        # Try common locations
-        candidates = [
-            Path.home() / ".cache" / "glove" / "glove.6B.300d.txt",
-            Path("data") / "glove" / "glove.6B.300d.txt",
-        ]
-        for p in candidates:
-            if p.exists():
-                glove_path = p
-                break
+        glove_path = get_default_glove_path()
         if glove_path is None:
             raise FileNotFoundError(
                 "GloVe file not found. Please download glove.6B.300d.txt and "
-                "place it at ~/.cache/glove/glove.6B.300d.txt or pass glove_path."
+                "place it at data/glove/glove.6B.300d.txt, "
+                "~/.cache/glove/glove.6B.300d.txt, or pass glove_path."
             )
 
     logger.info("Loading GloVe embeddings from %s...", glove_path)

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Generate figures for the paper from cached (or freshly computed) projections.
+Generate the projection figures referenced by the paper.
 
-Produces prose/img/autofilled_*.png images and optionally adds missing
-projections to the Streamlit cache.
+Produces the static `prose/img/autofilled_*.png` assets referenced by the
+LaTeX source and optionally fills the projection cache as a side effect.
 
 Usage:
     python scripts/generate_paper_figures.py
@@ -25,6 +25,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from config import (
     PAIR_TYPES,
+    PROJECT_ROOT,
     get_model_slug,
 )
 from semsim.projection_cache import (
@@ -33,7 +34,7 @@ from semsim.projection_cache import (
     load_projection_from_cache,
     save_projection_to_cache,
 )
-from scripts.prepopulate_cache import load_features_for_dataset
+from semsim.figure_data import load_features_for_dataset
 
 logger = logging.getLogger(__name__)
 
@@ -66,9 +67,8 @@ MODEL_DISPLAY = {
 POINT_ALPHA = 0.45
 POINT_SIZE = 6
 BG_COLOR = "#fafafa"
-GRID_COLOR = "#e0e0e0"
 
-OUTPUT_DIR = Path("prose/img")
+OUTPUT_DIR = PROJECT_ROOT / "prose" / "img"
 
 
 def _style_ax(ax, title=None, show_axes=True):
@@ -187,34 +187,6 @@ def fig_model_grid(models, dataset, method_kwargs, dpi, tag,
     return out
 
 
-def fig_subset_grid(model, dataset, method_kwargs, dpi, tag,
-                    suptitle="", method="umap"):
-    """2×2 grid with separate projections per subset."""
-    subsets = [
-        (ALL_FOUR, "All four pair types"),
-        ([p for p in ALL_FOUR if p != "shuffled_antonym_words"],
-         "Without Shuffled Ant."),
-        ([p for p in ALL_FOUR if p != "shuffled_synonym_words"],
-         "Without Shuffled Syn."),
-        (["antonyms", "synonyms"], "Antonyms & Synonyms only"),
-    ]
-    fig, axes = plt.subplots(2, 2, figsize=(8, 7.5))
-    for ax, (pts, subtitle) in zip(axes.flat, subsets):
-        data = _get_or_compute(dataset, model, method, 2, method_kwargs,
-                               pair_types=pts)
-        scatter_projection(ax, data["coords"], data["labels"])
-        _style_ax(ax, title=subtitle, show_axes=False)
-    _shared_legend(fig)
-    if suptitle:
-        fig.suptitle(suptitle, fontsize=11, y=0.98)
-    fig.tight_layout(rect=[0, 0.03, 1, 0.95])
-    out = OUTPUT_DIR / f"autofilled_{tag}.png"
-    fig.savefig(out, dpi=dpi, bbox_inches="tight", facecolor="white")
-    plt.close(fig)
-    logger.info("Saved %s", out)
-    return out
-
-
 def fig_nonresults_grid(dpi, tag):
     """2×2 grid of 'non-result' projections."""
     fig, axes = plt.subplots(2, 2, figsize=(8, 7.5))
@@ -251,6 +223,73 @@ def fig_nonresults_grid(dpi, tag):
     _shared_legend(fig)
     fig.suptitle("Non-swirl projections", fontsize=11, y=0.98)
     fig.tight_layout(rect=[0, 0.03, 1, 0.95])
+    out = OUTPUT_DIR / f"autofilled_{tag}.png"
+    fig.savefig(out, dpi=dpi, bbox_inches="tight", facecolor="white")
+    plt.close(fig)
+    logger.info("Saved %s", out)
+    return out
+
+
+def fig_oai_large_other_projections(dpi, tag):
+    """2-panel figure for OpenAI Large PCA and t-SNE."""
+    fig, axes = plt.subplots(1, 2, figsize=(10, 4.5))
+
+    pca = _get_or_compute("unfiltered", "text-embedding-3-large", "pca", 2, {})
+    scatter_projection(
+        axes[0], pca["coords"], pca["labels"],
+        pair_types_to_show=["antonyms", "synonyms"], s=1, alpha=0.5,
+    )
+    _style_ax(axes[0], title="PCA — OpenAI Large", show_axes=True)
+    axes[0].set_xlabel("PC 1", fontsize=9)
+    axes[0].set_ylabel("PC 2", fontsize=9)
+
+    tsne = _get_or_compute(
+        "unfiltered", "text-embedding-3-large", "tsne", 2,
+        {"perplexity": 30, "max_iter": 1000, "pca_dims": 50, "metric": "euclidean"},
+    )
+    scatter_projection(
+        axes[1], tsne["coords"], tsne["labels"],
+        pair_types_to_show=["antonyms", "synonyms"], s=1, alpha=0.5,
+    )
+    _style_ax(axes[1], title="t-SNE — OpenAI Large", show_axes=True)
+    axes[1].set_xlabel("t-SNE 1", fontsize=9)
+    axes[1].set_ylabel("t-SNE 2", fontsize=9)
+
+    _shared_legend(fig, pair_types=["antonyms", "synonyms"], ncol=2, bbox_to_anchor=(0.5, -0.02))
+    fig.tight_layout(rect=[0, 0.04, 1, 1])
+    out = OUTPUT_DIR / f"autofilled_{tag}.png"
+    fig.savefig(out, dpi=dpi, bbox_inches="tight", facecolor="white")
+    plt.close(fig)
+    logger.info("Saved %s", out)
+    return out
+
+
+def fig_antsyn_only_selected(dpi, tag):
+    """3-panel figure with the selected antonym/synonym-only UMAP projections."""
+    selected = [
+        ("word2vec", "Word2Vec", {"n_neighbors": 50, "min_dist": 0.25}),
+        ("bert-base-cased", "BERT Base", {"n_neighbors": 30, "min_dist": 0.25}),
+        ("text-embedding-3-large", "OpenAI Large", {"n_neighbors": 100, "min_dist": 0.01}),
+    ]
+    fig, axes = plt.subplots(1, 3, figsize=(12, 4.2))
+    pair_types = ["antonyms", "synonyms"]
+    for ax, (model, display, method_kwargs) in zip(axes.flat, selected):
+        data = _get_or_compute(
+            "unfiltered",
+            model,
+            "umap",
+            2,
+            method_kwargs,
+            pair_types=pair_types,
+        )
+        scatter_projection(
+            ax, data["coords"], data["labels"],
+            pair_types_to_show=pair_types, s=2, alpha=0.4,
+        )
+        _style_ax(ax, title=display, show_axes=False)
+
+    _shared_legend(fig, pair_types=pair_types, ncol=2, bbox_to_anchor=(0.5, -0.02))
+    fig.tight_layout(rect=[0, 0.04, 1, 1])
     out = OUTPUT_DIR / f"autofilled_{tag}.png"
     fig.savefig(out, dpi=dpi, bbox_inches="tight", facecolor="white")
     plt.close(fig)
@@ -295,29 +334,29 @@ def fig_hp_grid(model, dataset, nn_list, md_list, dpi, tag,
     return out
 
 
-def fig_single_projection(model, dataset, method, method_kwargs, dpi, tag,
-                          suptitle="", pair_types_to_show=None,
-                          s=1, alpha=0.5, metric="euclidean",
-                          xlabel="Dim 1", ylabel="Dim 2"):
-    """Single projection scatter plot (PCA, t-SNE, UMAP, …)."""
-    data = _get_or_compute(dataset, model, method, 2, method_kwargs,
-                           metric=metric)
-    fig, ax = plt.subplots(figsize=(6, 5))
-    show = pair_types_to_show or ALL_FOUR
-    scatter_projection(ax, data["coords"], data["labels"],
-                       pair_types_to_show=show, s=s, alpha=alpha)
-    _style_ax(ax, show_axes=True)
-    ax.set_xlabel(xlabel, fontsize=9)
-    ax.set_ylabel(ylabel, fontsize=9)
-    if suptitle:
-        ax.set_title(suptitle, fontsize=10)
-    ax.legend(markerscale=3, fontsize=9, loc="best", framealpha=0.8)
-    fig.tight_layout()
-    out = OUTPUT_DIR / f"autofilled_{tag}.png"
-    fig.savefig(out, dpi=dpi, bbox_inches="tight", facecolor="white")
-    plt.close(fig)
-    logger.info("Saved %s", out)
-    return out
+def validate_required_inputs(models):
+    """Fail early if required unfiltered inputs are missing."""
+    missing = []
+    for model in models:
+        try:
+            features = load_features_for_dataset(
+                model,
+                "unfiltered",
+                ["antonyms", "synonyms"],
+                "difference",
+                False,
+                True,
+            )
+        except Exception as exc:
+            missing.append(f"{model}: {exc}")
+            continue
+        if features is None:
+            missing.append(f"{model}: no unfiltered features available")
+    if missing:
+        raise RuntimeError(
+            "Cannot regenerate paper figures because required model data is missing:\n- "
+            + "\n- ".join(missing)
+        )
 
 
 # ============================================================================
@@ -335,31 +374,6 @@ def main():
 
     umap_main = {"n_neighbors": 30, "min_dist": 0.1}
     main_models = ["word2vec", "glove", "bert-base-cased", "text-embedding-3-large"]
-
-    # --- 2×2 model grid, unfiltered, nn=30 md=0.1 ---
-    fig_model_grid(
-        main_models, "unfiltered", umap_main, args.dpi,
-        tag="umap_grid_unfiltered",
-        suptitle="UMAP of difference vectors (n_neighbors=30, min_dist=0.1)",
-    )
-
-    # --- Word2Vec subset grid, unfiltered ---
-    fig_subset_grid(
-        "word2vec", "unfiltered", umap_main, args.dpi,
-        tag="umap_subsets_word2vec_unfiltered",
-        suptitle="Word2Vec UMAP subsets (nn=30, md=0.1, unfiltered)",
-    )
-
-    # --- text-embedding-3-large subset grid, unfiltered ---
-    fig_subset_grid(
-        "text-embedding-3-large", "unfiltered", umap_main, args.dpi,
-        tag="umap_subsets_oai_large_unfiltered",
-        suptitle="OpenAI Large UMAP subsets (nn=30, md=0.1, unfiltered)",
-    )
-
-    # --- UMAP hyperparameter grids for all 5 models ---
-    grid_nn = [15, 30, 50, 100]
-    grid_md = [0.005, 0.01, 0.1, 0.25]
     all_models = [
         ("word2vec", "Word2Vec"),
         ("glove", "GloVe"),
@@ -367,50 +381,35 @@ def main():
         ("text-embedding-3-small", "OpenAI Small"),
         ("text-embedding-3-large", "OpenAI Large"),
     ]
-    for model, display in all_models:
-        slug = get_model_slug(model).replace("/", "_")
-        fig_hp_grid(
-            model, "unfiltered", grid_nn, grid_md, args.dpi,
-            tag=f"umap_hp_grid_{slug}",
-            suptitle=f"{display} — UMAP hyperparameter grid (unfiltered)",
-        )
 
-    # --- UMAP HP grids with antonyms + synonyms only ---
-    ant_syn = ["antonyms", "synonyms"]
-    for model, display in all_models:
-        slug = get_model_slug(model).replace("/", "_")
-        fig_hp_grid(
-            model, "unfiltered", grid_nn, grid_md, args.dpi,
-            tag=f"umap_hp_grid_{slug}_antsyn",
-            suptitle=f"{display} — UMAP HP grid (ant.+syn. only)",
-            pair_types=ant_syn,
-        )
+    validate_required_inputs([model for model, _display in all_models])
 
-    # --- Non-results 2×2 grid ---
+    # Figure 3 in the paper
+    fig_model_grid(
+        main_models, "unfiltered", umap_main, args.dpi,
+        tag="umap_grid_unfiltered",
+        suptitle="UMAP of difference vectors (n_neighbors=30, min_dist=0.1)",
+    )
+
+    # Figure 2 in the paper
+    grid_nn = [15, 30, 50, 100]
+    grid_md = [0.005, 0.01, 0.1, 0.25]
+    fig_hp_grid(
+        "bert-base-cased", "unfiltered", grid_nn, grid_md, args.dpi,
+        tag=f"umap_hp_grid_{get_model_slug('bert-base-cased')}",
+        suptitle="BERT Base — UMAP hyperparameter grid (unfiltered)",
+    )
+
+    # Figure 4 in the paper
     fig_nonresults_grid(args.dpi, tag="nonresults_grid")
 
-    # --- PCA text-embedding-3-large, unfiltered ---
-    fig_single_projection(
-        "text-embedding-3-large", "unfiltered", "pca", {}, args.dpi,
-        tag="pca_oai_large_unfiltered",
-        suptitle="PCA — OpenAI Large difference vectors",
-        pair_types_to_show=["antonyms", "synonyms"],
-        s=1, xlabel="PC 1", ylabel="PC 2",
-    )
+    # Figure 5 in the paper
+    fig_oai_large_other_projections(args.dpi, tag="oai_large_pca_tsne")
 
-    # --- t-SNE text-embedding-3-large, unfiltered ---
-    fig_single_projection(
-        "text-embedding-3-large", "unfiltered", "tsne",
-        {"perplexity": 30, "max_iter": 1000, "pca_dims": 50,
-         "metric": "euclidean"},
-        args.dpi,
-        tag="tsne_oai_large_unfiltered",
-        suptitle="t-SNE — OpenAI Large difference vectors",
-        pair_types_to_show=["antonyms", "synonyms"],
-        s=1, xlabel="t-SNE 1", ylabel="t-SNE 2",
-    )
+    # Figure 6 in the paper
+    fig_antsyn_only_selected(args.dpi, tag="antsyn_only_selected")
 
-    logger.info("All figures generated in %s", OUTPUT_DIR)
+    logger.info("Paper figures generated in %s", OUTPUT_DIR)
 
 
 if __name__ == "__main__":
