@@ -220,7 +220,7 @@ results/stuttgart_processed.csv
 results/vocabulary.txt
 
 # Large downloadable files
-data/glove/
+data/glove/glove.6B.300d.txt
 
 # Streamlit cache (not used in shareable version)
 data/streamlit_image_cache/
