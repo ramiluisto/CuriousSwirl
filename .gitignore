@@ -239,4 +239,4 @@ prose/*.fls
 prose/*.log
 prose/*.out
 prose/*.synctex.gz
-prose/*.pdf
+#prose/*.pdf
