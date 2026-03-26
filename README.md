@@ -171,6 +171,7 @@ pytest tests/
 @article{luisto2026swirl,
   title={A visual observation on the geometry of UMAP projections of the difference vectors of antonym and synonym word pair embeddings},
   author={Luisto, Rami},
+  journal={arXiv preprint arXiv:2603.24150},
   year={2026}
 }
 ```
