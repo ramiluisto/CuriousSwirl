@@ -4,7 +4,7 @@
 
 ---
 
-Companion code for the paper *"A visual observation on the geometry of UMAP projections of the difference vectors of antonym and synonym word pair embeddings"*. (Submitted to arXiv, pending.)
+Companion code for the paper [*"A visual observation on the geometry of UMAP projections of the difference vectors of antonym and synonym word pair embeddings"*](https://arxiv.org/abs/2603.24150).
 
 This repository reproduces the UMAP projection visualizations showing a consistent "swirl" pattern in the difference vectors of synonym and antonym word embeddings — stable across Word2Vec, GloVe, BERT, and OpenAI embedding models.
 
