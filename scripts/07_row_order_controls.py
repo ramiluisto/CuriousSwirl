@@ -101,16 +101,19 @@ N_NEIGHBORS, MIN_DIST, SEED = 30, 0.1, 42
 # Data
 # ---------------------------------------------------------------------------
 
-def load_bundle(model, input_type="difference"):
+def load_bundle(model, input_type="difference", return_pairs=False):
     """Features in the paper's row order, plus pair type and Stuttgart split per row."""
     data = load_unfiltered_pairs_for_model(model)
-    parts, labels, splits = [], [], []
+    parts, labels, splits, all_pairs = [], [], [], []
     for pair_type in PAIR_TYPES:
         pairs, emb_pairs, _meta, split_labels = data[pair_type]
         parts.append(build_features(emb_pairs, input_type).astype(np.float32))
         labels.extend([pair_type] * len(pairs))
         splits.extend(split_labels if split_labels else [""] * len(pairs))
+        all_pairs.extend(pairs)
     X = StandardScaler().fit_transform(np.vstack(parts)).astype(np.float32)
+    if return_pairs:
+        return X, np.array(labels), np.array(splits), all_pairs
     return X, np.array(labels), np.array(splits)
 
 
@@ -160,6 +163,38 @@ def hubness_table(model, X):
     return table
 
 
+def hub_profile(model, top=12):
+    """Who the hubs of the Euclidean 30-NN graph of difference vectors are.
+
+    Returns the most popular points (word pair, pair type, share of all points
+    that list it as a neighbour, norm relative to the median norm), the rank
+    correlation between popularity and vector length, and for each pair type
+    the share of its neighbour slots that point at the 1% most popular points.
+    """
+    from scipy.stats import spearmanr
+
+    X, labels, _splits, pairs = load_bundle(model, return_pairs=True)
+    n = len(X)
+    neighbours = exact_knn(X, N_NEIGHBORS)[0][:, 1:]
+    in_degree = np.bincount(neighbours.ravel(), minlength=n)
+    norms = np.linalg.norm(X, axis=1)
+    ranked = np.argsort(-in_degree)
+    hubs = ranked[: max(1, n // 100)]
+    return {
+        "top_hubs": [
+            {"pair": list(pairs[i]), "pair_type": str(labels[i]),
+             "neighbour_of_frac": float(in_degree[i] / n),
+             "norm_over_median": float(norms[i] / np.median(norms))}
+            for i in ranked[:top]
+        ],
+        "spearman_in_degree_vs_norm": float(spearmanr(in_degree, norms)[0]),
+        "top1pct_hubs_by_pair_type": {t: int((labels[hubs] == t).sum()) for t in PAIR_TYPES},
+        "frac_neighbours_that_are_top1pct_hubs": {
+            t: float(np.isin(neighbours[labels == t], hubs).mean()) for t in PAIR_TYPES
+        },
+    }
+
+
 # ---------------------------------------------------------------------------
 # Experiments
 # ---------------------------------------------------------------------------
@@ -170,7 +205,11 @@ def run_model(model, force=False):
     stats_path = OUT_DIR / f"{slug}.json"
     if cache.exists() and stats_path.exists() and not force:
         logger.info("%s: cached", model)
-        return json.loads(stats_path.read_text()), dict(np.load(cache))
+        stats = json.loads(stats_path.read_text())
+        if "hub_profile" not in stats:
+            stats["hub_profile"] = hub_profile(model)
+            stats_path.write_text(json.dumps(stats, indent=2))
+        return stats, dict(np.load(cache))
 
     X, labels, splits = load_bundle(model)
     n, d = X.shape
@@ -206,6 +245,7 @@ def run_model(model, force=False):
 
     stats["raw_space"] = raw_space_baselines(X, labels, splits)
     stats["hubness"] = hubness_table(model, X)
+    stats["hub_profile"] = hub_profile(model)
     logger.info("  raw space %s", stats["raw_space"])
     logger.info("  hubness %s", stats["hubness"])
 
@@ -309,7 +349,7 @@ def figure_synthetic(layouts, labels, path):
         ("paper", True, "Same layout\n(coloured by ROW INDEX)"),
         ("rows_permuted", False, "Same noise,\nrows in random order"),
         ("sgd_random_order", False, "Same graph and init,\nedges visited in random order"),
-        ("equal_norms", False, "Noise with equal norms\n(no hubs), rows as stored"),
+        ("equal_norms", False, "Noise with equal norms\n(far weaker hubs), rows as stored"),
     ]
     fig, axes = plt.subplots(1, len(columns), figsize=(3.3 * len(columns), 3.7))
     for ax, (arm, by_row, title) in zip(axes, columns):
