@@ -110,9 +110,10 @@ These scripts produce the paper's key visual results (including the "swirl") and
 ## Row-Order Controls (read before interpreting the swirl)
 
 A later analysis of this repository found that the swirl follows the **row order of
-the data matrix**: with a fixed `random_state`, umap-learn < 0.6 visits the graph
-edges in row order, and on the hub-dominated neighbour graph of the difference
-vectors this lays the points out along a curve traced in storage order. Because the
+the data matrix**: umap-learn's default layout optimiser (0.5.x, and still the
+default in 0.6.0) visits the graph edges in row order, and on the hub-dominated
+neighbour graph of the difference vectors this lays the points out along a curve
+traced in storage order. Because the
 four pair types are stacked as four row blocks, they appear as separate coloured
 filaments. Shuffling the rows of the same matrix keeps the filament and mixes the
 colours; i.i.d. noise with unequal norms produces the same picture. See

@@ -105,6 +105,13 @@ same pair type. Chance is 0.25.
 | text-embedding-3-large | 0.89 | 0.29 | 0.32 | 0.96 |
 | i.i.d. noise (1.3) | 0.85 | 0.25 | 0.25 | – |
 
+The same control applied to the paper's Figure 2, the BERT hyperparameter grid
+(`scripts/generate_hp_grid.py --model bert-base-cased --shuffle-rows`): the filament
+is there in all sixteen settings and the four pair types are mixed along it in every
+one.
+
+![The paper's Figure 2 with shuffled rows](img/umap_hp_grid_bert_rows_shuffled.png)
+
 ### 1.2 Mechanism
 
 Three observations pin the mechanism down.
@@ -582,8 +589,8 @@ python scripts/07_row_order_controls.py --umap-optimizer adam --out-dir results/
 ```
 
 The numbers quoted above are stored in `data/`; the stage-by-stage test quoted in
-1.2 (initialisation versus SGD, exact neighbours) was run once by hand and is not
-scripted. `tests/test_order_artefact.py` contains an executable statement of the
+1.2 (initialisation versus SGD, exact neighbours) and the reading of the principal
+components in 3.4 were done once by hand and are not scripted. `tests/test_order_artefact.py` contains an executable statement of the
 artefact on i.i.d. noise; it is skipped on umap-learn ≥ 0.6, whose internals differ.
 
 ### Limits of this analysis

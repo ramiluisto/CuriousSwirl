@@ -99,13 +99,13 @@ def compute_umap_projection(
         n_components: Number of output dimensions (2 or 3).
         metric: Distance metric ("euclidean" or "cosine").
         shuffle_rows: Fit UMAP on a random permutation of the rows and return
-            the coordinates in the original row order.  With a fixed
-            ``random_state``, umap-learn < 0.6 visits the graph edges in row
-            order, and on hub-dominated data the layout then follows the row
-            order of ``X`` (see ``semsim.order_artefact``).  Shuffling stops
-            classes that are stored as contiguous row blocks from showing up
-            as separate regions for that reason alone.  The default (False)
-            reproduces the figures of the paper.
+            the coordinates in the original row order.  umap-learn's default
+            layout optimiser visits the graph edges in row order, and on
+            hub-dominated data the layout then follows the row order of ``X``
+            (see ``semsim.order_artefact``).  Shuffling stops classes that are
+            stored as contiguous row blocks from showing up as separate
+            regions for that reason alone; it does not remove the curve
+            itself.  The default (False) reproduces the figures of the paper.
 
     Returns:
         coords: Array of shape (n_samples, n_components).
