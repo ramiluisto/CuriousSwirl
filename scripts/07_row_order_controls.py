@@ -32,6 +32,11 @@ Usage:
     python scripts/07_row_order_controls.py
     python scripts/07_row_order_controls.py --models bert-base-cased word2vec
     python scripts/07_row_order_controls.py --synthetic-only
+
+The first three interventions work with any umap-learn version; the two
+``sgd_*`` arms need umap-learn < 0.6 and are skipped otherwise.  To compare
+library versions, run the script once per environment with different
+``--out-dir`` values.
 """
 
 import argparse
@@ -328,8 +333,13 @@ def main():
     parser.add_argument("--models", nargs="+", default=MODELS)
     parser.add_argument("--synthetic-only", action="store_true")
     parser.add_argument("--force", action="store_true", help="recompute even if cached")
+    parser.add_argument("--out-dir", type=Path, default=None,
+                        help="output directory (default: results/row_order_controls)")
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s", datefmt="%H:%M:%S")
+    if args.out_dir is not None:
+        global OUT_DIR
+        OUT_DIR = args.out_dir
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     import umap

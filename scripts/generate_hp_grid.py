@@ -11,6 +11,9 @@ Examples:
     # Custom hyperparameter ranges
     python scripts/generate_hp_grid.py --model text-embedding-3-large \
         --nn 15 30 50 --md 0.01 0.1 0.5
+
+    # Control: same data and parameters, rows of the data matrix shuffled
+    python scripts/generate_hp_grid.py --model bert-base-cased --shuffle-rows
 """
 
 import argparse
@@ -41,6 +44,9 @@ def main():
     parser.add_argument("--pair-types", nargs="+", default=None,
                         help="Pair types to include (default: all four). "
                              "Options: synonyms antonyms shuffled_synonym_words shuffled_antonym_words")
+    parser.add_argument("--shuffle-rows", action="store_true",
+                        help="Fit UMAP on a random permutation of the rows (row-order control; "
+                             "see analysis/README.md). Output goes to a separate file.")
     parser.add_argument("--dpi", type=int, default=200)
     parser.add_argument("--output-dir", type=str, default=None,
                         help="Output directory (default: results/images/)")
@@ -59,10 +65,14 @@ def main():
     display = MODEL_DISPLAY_NAMES.get(args.model, args.model)
     tag = f"umap_hp_grid_{slug}"
     suptitle = f"{display} — UMAP hyperparameter grid (unfiltered)"
+    if args.shuffle_rows:
+        tag += "_rows_shuffled"
+        suptitle += ", rows shuffled"
 
     out = fig_hp_grid(
         args.model, "unfiltered", args.nn, args.md, args.dpi,
         tag=tag, suptitle=suptitle, pair_types=args.pair_types,
+        shuffle_rows=args.shuffle_rows,
     )
     print(f"Saved: {out}")
 

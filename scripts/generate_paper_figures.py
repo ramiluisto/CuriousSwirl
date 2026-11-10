@@ -301,9 +301,14 @@ def fig_antsyn_only_selected(dpi, tag):
 
 
 def fig_hp_grid(model, dataset, nn_list, md_list, dpi, tag,
-                suptitle="", method="umap", pair_types=None):
-    """Rows = n_neighbors, cols = min_dist hyperparameter sweep."""
+                suptitle="", method="umap", pair_types=None, shuffle_rows=False):
+    """Rows = n_neighbors, cols = min_dist hyperparameter sweep.
+
+    With ``shuffle_rows=True`` UMAP is fitted on a random permutation of the
+    rows (see ``compute_umap_projection``); the default reproduces the paper.
+    """
     pts = pair_types or ALL_FOUR
+    extra = {"shuffle_rows": True} if shuffle_rows else {}
     nrows, ncols = len(nn_list), len(md_list)
     fig, axes = plt.subplots(nrows, ncols, figsize=(3 * ncols, 3 * nrows))
     if nrows == 1:
@@ -315,7 +320,7 @@ def fig_hp_grid(model, dataset, nn_list, md_list, dpi, tag,
         for ci, md in enumerate(md_list):
             ax = axes[ri, ci]
             data = _get_or_compute(dataset, model, method, 2,
-                                   {"n_neighbors": nn, "min_dist": md},
+                                   {"n_neighbors": nn, "min_dist": md, **extra},
                                    pair_types=pts)
             scatter_projection(ax, data["coords"], data["labels"],
                                s=2, alpha=0.35)

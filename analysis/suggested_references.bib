@@ -1,0 +1,615 @@
+% Suggested additional references for the swirl preprint.
+%
+% Every entry below was checked by a literature-search agent against a page it fetched
+% (ACL Anthology, arXiv, Crossref/doi.org, JMLR, PMLR, NeurIPS, OpenReview) on 2026-11-10.
+% They are still machine-assembled: please re-check each one before citing.
+% See analysis/README.md, section 'Related literature', for how each one bears on the paper.
+
+
+% ============================================================================
+% Neighbour embeddings: what UMAP plots can and cannot show
+% ============================================================================
+
+@inproceedings{damrich2021umap,
+  author = {Damrich, Sebastian and Hamprecht, Fred A.},
+  title = {On {UMAP}'s True Loss Function},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume = {34}, pages = {5798--5809}, year = {2021},
+  publisher = {Curran Associates, Inc.}, eprint = {2103.14608}, archivePrefix = {arXiv},
+  url = {https://proceedings.neurips.cc/paper/2021/hash/2de5d16682c3c35007e4e92982f1a2ba-Abstract.html}
+}
+
+@article{bohm2022attraction,
+  author = {B{\"o}hm, Jan Niklas and Berens, Philipp and Kobak, Dmitry},
+  title = {Attraction-Repulsion Spectrum in Neighbor Embeddings},
+  journal = {Journal of Machine Learning Research},
+  volume = {23}, number = {95}, pages = {1--32}, year = {2022},
+  url = {https://jmlr.org/papers/v23/21-0055.html}
+}
+
+@article{kobak2021initialization,
+  author = {Kobak, Dmitry and Linderman, George C.},
+  title = {Initialization is critical for preserving global data structure in both {t-SNE} and {UMAP}},
+  journal = {Nature Biotechnology},
+  volume = {39}, number = {2}, pages = {156--157}, year = {2021},
+  doi = {10.1038/s41587-020-00809-z}
+}
+
+@article{wattenberg2016tsne,
+  author = {Wattenberg, Martin and Vi{\'e}gas, Fernanda and Johnson, Ian},
+  title = {How to Use {t-SNE} Effectively},
+  journal = {Distill}, volume = {1}, number = {10}, pages = {e2}, year = {2016},
+  doi = {10.23915/distill.00002}, url = {https://distill.pub/2016/misread-tsne/}
+}
+
+@article{chari2023specious,
+  author = {Chari, Tara and Pachter, Lior},
+  title = {The specious art of single-cell genomics},
+  journal = {PLOS Computational Biology},
+  volume = {19}, number = {8}, pages = {e1011288}, year = {2023},
+  doi = {10.1371/journal.pcbi.1011288}
+}
+
+@article{lause2024elephant,
+  author = {Lause, Jan and Berens, Philipp and Kobak, Dmitry},
+  title = {The art of seeing the elephant in the room: {2D} embeddings of single-cell data do make sense},
+  journal = {PLOS Computational Biology},
+  volume = {20}, number = {10}, pages = {e1012403}, year = {2024},
+  doi = {10.1371/journal.pcbi.1012403}
+}
+
+@article{debodt2025lowdim,
+  author = {de Bodt, Cyril and Diaz-Papkovich, Alex and Bleher, Michael and Bunte, Kerstin and Coupette, Corinna and Damrich, Sebastian and {Fita Sanmartin}, Enrique and Hamprecht, Fred A. and Horv{\'a}t, Em{\H o}ke-{\'A}gnes and Kohli, Dhruv and Krishnaswamy, Smita and Lee, John A. and Lelieveldt, Boudewijn P. F. and McInnes, Leland and Nabney, Ian T. and Noichl, Maximilian and Poli{\v c}ar, Pavlin G. and Rieck, Bastian and Wolf, Guy and Mishne, Gal and Kobak, Dmitry},
+  title = {Low-dimensional embeddings of high-dimensional data},
+  journal = {arXiv preprint arXiv:2508.15929}, year = {2025},
+  note = {Outcome of Dagstuhl Seminar 24122}
+}
+
+@article{jeon2025stop,
+  author = {Jeon, Hyeon and Park, Jeongin and Shin, Sungbok and Seo, Jinwook},
+  title = {Stop Misusing {t-SNE} and {UMAP} for Visual Analytics},
+  journal = {arXiv preprint arXiv:2506.08725},
+  year = {2025},
+  note = {arXiv comment: IEEE VIS 2026 and IEEE Transactions on Visualization and Computer Graphics},
+  url = {https://arxiv.org/abs/2506.08725}
+}
+
+@article{johnson2022embedr,
+  author = {Johnson, Eric M. and Kath, William and Mani, Madhav},
+  title = {{EMBEDR}: Distinguishing signal from noise in single-cell omics data},
+  journal = {Patterns}, volume = {3}, number = {3}, pages = {100443}, year = {2022},
+  doi = {10.1016/j.patter.2022.100443}
+}
+
+@article{xia2024scdeed,
+  author = {Xia, Lucy and Lee, Christy and Li, Jingyi Jessica},
+  title = {Statistical method {scDEED} for detecting dubious {2D} single-cell embeddings and optimizing {t-SNE} and {UMAP} hyperparameters},
+  journal = {Nature Communications}, volume = {15}, number = {1}, pages = {1753}, year = {2024},
+  doi = {10.1038/s41467-024-45891-y}
+}
+
+@article{liu2025loomap,
+  author = {Liu, Zhexuan and Ma, Rong and Zhong, Yiqiao},
+  title = {Assessing and improving reliability of neighbor embedding methods: a map-continuity perspective},
+  journal = {Nature Communications}, volume = {16}, number = {1}, pages = {5037}, year = {2025},
+  doi = {10.1038/s41467-025-60434-9}, eprint = {2410.16608}, archivePrefix = {arXiv}
+}
+
+@article{dalmia2021clustering,
+  author = {Dalmia, Ayush and Sia, Suzanna},
+  title = {Clustering with {UMAP}: Why and How Connectivity Matters},
+  journal = {arXiv preprint arXiv:2108.05525}, year = {2021},
+  note = {GCLR Workshop at AAAI 2022}
+}
+
+
+% ============================================================================
+% Distance concentration and hubness
+% ============================================================================
+
+@article{radovanovic2010hubs,
+  author = {Radovanovi{\'c}, Milo{\v s} and Nanopoulos, Alexandros and Ivanovi{\'c}, Mirjana},
+  title = {Hubs in Space: Popular Nearest Neighbors in High-Dimensional Data},
+  journal = {Journal of Machine Learning Research},
+  volume = {11}, number = {86}, pages = {2487--2531}, year = {2010},
+  url = {https://jmlr.org/papers/v11/radovanovic10a.html}
+}
+
+@article{hall2005geometric,
+  author = {Hall, Peter and Marron, J. S. and Neeman, Amnon},
+  title = {Geometric Representation of High Dimension, Low Sample Size Data},
+  journal = {Journal of the Royal Statistical Society: Series B (Statistical Methodology)},
+  volume = {67}, number = {3}, pages = {427--444}, year = {2005},
+  doi = {10.1111/j.1467-9868.2005.00510.x}
+}
+
+@inproceedings{dinu2015hubness,
+  author = {Dinu, Georgiana and Lazaridou, Angeliki and Baroni, Marco},
+  title = {Improving zero-shot learning by mitigating the hubness problem},
+  booktitle = {International Conference on Learning Representations (ICLR), Workshop Track},
+  year = {2015}, eprint = {1412.6568}, archivePrefix = {arXiv},
+  url = {https://arxiv.org/abs/1412.6568}
+}
+
+@article{feldbauer2019hubness,
+  author = {Feldbauer, Roman and Flexer, Arthur},
+  title = {A comprehensive empirical comparison of hubness reduction in high-dimensional spaces},
+  journal = {Knowledge and Information Systems},
+  volume = {59}, number = {1}, pages = {137--166}, year = {2019},
+  doi = {10.1007/s10115-018-1205-y}
+}
+
+@inproceedings{beyer1999nearest,
+  author = {Beyer, Kevin and Goldstein, Jonathan and Ramakrishnan, Raghu and Shaft, Uri},
+  title = {When Is ``Nearest Neighbor'' Meaningful?},
+  booktitle = {Database Theory --- ICDT'99},
+  editor = {Beeri, Catriel and Buneman, Peter},
+  series = {Lecture Notes in Computer Science},
+  pages = {217--235}, publisher = {Springer}, year = {1999},
+  doi = {10.1007/3-540-49257-7_15}
+}
+
+@inproceedings{bratic2018nndescent,
+  author = {Brati{\'c}, Brankica and Houle, Michael E. and Kurbalija, Vladimir and Oria, Vincent and Radovanovi{\'c}, Milo{\v s}},
+  title = {{NN-Descent} on High-Dimensional Data},
+  booktitle = {Proceedings of the 8th International Conference on Web Intelligence, Mining and Semantics (WIMS)},
+  pages = {1--8}, year = {2018}, publisher = {ACM}, doi = {10.1145/3227609.3227643}
+}
+
+
+% ============================================================================
+% Embedding-space confounds (norms, rogue dimensions)
+% ============================================================================
+
+@inproceedings{mu2018allbutthetop, author={Mu, Jiaqi and Viswanath, Pramod}, title={All-but-the-Top: Simple and Effective Postprocessing for Word Representations}, booktitle={International Conference on Learning Representations (ICLR)}, year={2018}, url={https://openreview.net/forum?id=HkuGJ3kCb}, note={arXiv:1702.01417 lists Jiaqi Mu, Suma Bhat, Pramod Viswanath}}
+
+@article{schakel2015measuring, author={Schakel, Adriaan M. J. and Wilson, Benjamin J.}, title={Measuring Word Significance using Distributed Representations of Words}, journal={arXiv preprint arXiv:1508.02297}, year={2015}}
+
+@inproceedings{timkey-van-schijndel-2021-bark,
+    title = "All Bark and No Bite: Rogue Dimensions in Transformer Language Models Obscure Representational Quality",
+    author = "Timkey, William  and
+      van Schijndel, Marten",
+    editor = "Moens, Marie-Francine  and
+      Huang, Xuanjing  and
+      Specia, Lucia  and
+      Yih, Scott Wen-tau",
+    booktitle = "Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing",
+    month = nov,
+    year = "2021",
+    address = "Online and Punta Cana, Dominican Republic",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2021.emnlp-main.372/",
+    doi = "10.18653/v1/2021.emnlp-main.372",
+    pages = "4527--4546"
+}
+
+
+% ============================================================================
+% Vector offsets for lexical relations and their critiques
+% ============================================================================
+
+@inproceedings{mikolov-etal-2013-linguistic,
+    title = "Linguistic Regularities in Continuous Space Word Representations",
+    author = "Mikolov, Tomas  and
+      Yih, Wen-tau  and
+      Zweig, Geoffrey",
+    editor = "Vanderwende, Lucy  and
+      Daum{\'e} III, Hal  and
+      Kirchhoff, Katrin",
+    booktitle = "Proceedings of the 2013 Conference of the {N}orth {A}merican Chapter of the {A}ssociation for {C}omputational {L}inguistics: Human Language Technologies",
+    month = jun,
+    year = "2013",
+    address = "Atlanta, Georgia",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/N13-1090/",
+    pages = "746--751"
+}
+
+@inproceedings{levy-goldberg-2014-linguistic,
+    title = "Linguistic Regularities in Sparse and Explicit Word Representations",
+    author = "Levy, Omer  and
+      Goldberg, Yoav",
+    editor = "Morante, Roser  and
+      Yih, Scott Wen-tau",
+    booktitle = "Proceedings of the Eighteenth Conference on Computational Natural Language Learning",
+    month = jun,
+    year = "2014",
+    address = "Ann Arbor, Michigan",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/W14-1618/",
+    doi = "10.3115/v1/W14-1618",
+    pages = "171--180"
+}
+
+@inproceedings{gladkova-etal-2016-analogy,
+    title = "Analogy-based detection of morphological and semantic relations with word embeddings: what works and what doesn{'}t.",
+    author = "Gladkova, Anna  and
+      Drozd, Aleksandr  and
+      Matsuoka, Satoshi",
+    editor = "Andreas, Jacob  and
+      Choi, Eunsol  and
+      Lazaridou, Angeliki",
+    booktitle = "Proceedings of the {NAACL} Student Research Workshop",
+    month = jun,
+    year = "2016",
+    address = "San Diego, California",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/N16-2002/",
+    doi = "10.18653/v1/N16-2002",
+    pages = "8--15"
+}
+
+@inproceedings{drozd-etal-2016-word,
+    title = "Word Embeddings, Analogies, and Machine Learning: Beyond king - man + woman = queen",
+    author = "Drozd, Aleksandr  and
+      Gladkova, Anna  and
+      Matsuoka, Satoshi",
+    editor = "Matsumoto, Yuji  and
+      Prasad, Rashmi",
+    booktitle = "Proceedings of {COLING} 2016, the 26th International Conference on Computational Linguistics: Technical Papers",
+    month = dec,
+    year = "2016",
+    address = "Osaka, Japan",
+    publisher = "The COLING 2016 Organizing Committee",
+    url = "https://aclanthology.org/C16-1332/",
+    pages = "3519--3530"
+}
+
+@inproceedings{koper2015multilingual, author={K{\"o}per, Maximilian and Scheible, Christian and Schulte im Walde, Sabine}, title={Multilingual Reliability and ``Semantic'' Structure of Continuous Word Spaces}, booktitle={Proceedings of the 11th International Conference on Computational Semantics (IWCS 2015)}, pages={40--45}, year={2015}, url={https://aclanthology.org/W15-0105/}}
+
+@inproceedings{vylomova-etal-2016-take,
+    title = "Take and Took, Gaggle and Goose, Book and Read: Evaluating the Utility of Vector Differences for Lexical Relation Learning",
+    author = "Vylomova, Ekaterina  and
+      Rimell, Laura  and
+      Cohn, Trevor  and
+      Baldwin, Timothy",
+    editor = "Erk, Katrin  and
+      Smith, Noah A.",
+    booktitle = "Proceedings of the 54th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)",
+    month = aug,
+    year = "2016",
+    address = "Berlin, Germany",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/P16-1158/",
+    doi = "10.18653/v1/P16-1158",
+    pages = "1671--1682"
+}
+
+@inproceedings{linzen-2016-issues,
+    title = "Issues in evaluating semantic spaces using word analogies",
+    author = "Linzen, Tal",
+    booktitle = "Proceedings of the 1st Workshop on Evaluating Vector-Space Representations for {NLP}",
+    month = aug,
+    year = "2016",
+    address = "Berlin, Germany",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/W16-2503/",
+    doi = "10.18653/v1/W16-2503",
+    pages = "13--18"
+}
+
+@inproceedings{rogers-etal-2017-many,
+    title = "The (too Many) Problems of Analogical Reasoning with Word Vectors",
+    author = "Rogers, Anna  and
+      Drozd, Aleksandr  and
+      Li, Bofang",
+    editor = "Ide, Nancy  and
+      Herbelot, Aur{\'e}lie  and
+      M{\`a}rquez, Llu{\'i}s",
+    booktitle = "Proceedings of the 6th Joint Conference on Lexical and Computational Semantics (*{SEM} 2017)",
+    month = aug,
+    year = "2017",
+    address = "Vancouver, Canada",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/S17-1017/",
+    doi = "10.18653/v1/S17-1017",
+    pages = "135--148"
+}
+
+@inproceedings{schluter-2018-word,
+    title = "The Word Analogy Testing Caveat",
+    author = "Schluter, Natalie",
+    editor = "Walker, Marilyn  and
+      Ji, Heng  and
+      Stent, Amanda",
+    booktitle = "Proceedings of the 2018 Conference of the {N}orth {A}merican Chapter of the {A}ssociation for {C}omputational {L}inguistics: Human Language Technologies, Volume 2 (Short Papers)",
+    month = jun,
+    year = "2018",
+    address = "New Orleans, Louisiana",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/N18-2039/",
+    doi = "10.18653/v1/N18-2039",
+    pages = "242--246"
+}
+
+@inproceedings{fournier-etal-2020-analogies,
+    title = "Analogies minus analogy test: measuring regularities in word embeddings",
+    author = "Fournier, Louis  and
+      Dupoux, Emmanuel  and
+      Dunbar, Ewan",
+    editor = "Fern{\'a}ndez, Raquel  and
+      Linzen, Tal",
+    booktitle = "Proceedings of the 24th Conference on Computational Natural Language Learning",
+    month = nov,
+    year = "2020",
+    address = "Online",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2020.conll-1.29/",
+    doi = "10.18653/v1/2020.conll-1.29",
+    pages = "365--375"
+}
+
+
+% ============================================================================
+% Lexical memorisation, shuffled-pair controls, lexical splits
+% ============================================================================
+
+@inproceedings{levy-etal-2015-supervised,
+    title = "Do Supervised Distributional Methods Really Learn Lexical Inference Relations?",
+    author = "Levy, Omer  and
+      Remus, Steffen  and
+      Biemann, Chris  and
+      Dagan, Ido",
+    editor = "Mihalcea, Rada  and
+      Chai, Joyce  and
+      Sarkar, Anoop",
+    booktitle = "Proceedings of the 2015 Conference of the {N}orth {A}merican Chapter of the {A}ssociation for {C}omputational {L}inguistics: Human Language Technologies",
+    month = may # "–" # jun,
+    year = "2015",
+    address = "Denver, Colorado",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/N15-1098/",
+    doi = "10.3115/v1/N15-1098",
+    pages = "970--976"
+}
+
+@inproceedings{weeds-etal-2014-learning,
+    title = "Learning to Distinguish Hypernyms and Co-Hyponyms",
+    author = "Weeds, Julie  and
+      Clarke, Daoud  and
+      Reffin, Jeremy  and
+      Weir, David  and
+      Keller, Bill",
+    editor = "Tsujii, Junichi  and
+      Hajic, Jan",
+    booktitle = "Proceedings of {COLING} 2014, the 25th International Conference on Computational Linguistics: Technical Papers",
+    month = aug,
+    year = "2014",
+    address = "Dublin, Ireland",
+    publisher = "Dublin City University and Association for Computational Linguistics",
+    url = "https://aclanthology.org/C14-1212/",
+    pages = "2249--2259"
+}
+
+@inproceedings{roller-etal-2014-inclusive,
+    title = "Inclusive yet Selective: Supervised Distributional Hypernymy Detection",
+    author = "Roller, Stephen  and
+      Erk, Katrin  and
+      Boleda, Gemma",
+    editor = "Tsujii, Junichi  and
+      Hajic, Jan",
+    booktitle = "Proceedings of {COLING} 2014, the 25th International Conference on Computational Linguistics: Technical Papers",
+    month = aug,
+    year = "2014",
+    address = "Dublin, Ireland",
+    publisher = "Dublin City University and Association for Computational Linguistics",
+    url = "https://aclanthology.org/C14-1097/",
+    pages = "1025--1036"
+}
+
+@inproceedings{shwartz-etal-2016-improving,
+    title = "Improving Hypernymy Detection with an Integrated Path-based and Distributional Method",
+    author = "Shwartz, Vered  and
+      Goldberg, Yoav  and
+      Dagan, Ido",
+    editor = "Erk, Katrin  and
+      Smith, Noah A.",
+    booktitle = "Proceedings of the 54th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)",
+    month = aug,
+    year = "2016",
+    address = "Berlin, Germany",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/P16-1226/",
+    doi = "10.18653/v1/P16-1226",
+    pages = "2389--2398"
+}
+
+@inproceedings{ali-etal-2024-antonym,
+    title = "Antonym vs Synonym Distinction using {I}nterla{C}ed Encoder {NET}works ({ICE}-{NET})",
+    author = "Ali, Muhammad  and
+      Hu, Yan  and
+      Qin, Jianbin  and
+      Wang, Di",
+    editor = "Graham, Yvette  and
+      Purver, Matthew",
+    booktitle = "Findings of the {A}ssociation for {C}omputational {L}inguistics: {EACL} 2024",
+    month = mar,
+    year = "2024",
+    address = "St. Julian{'}s, Malta",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2024.findings-eacl.99/",
+    doi = "10.18653/v1/2024.findings-eacl.99",
+    pages = "1462--1473"
+}
+
+
+% ============================================================================
+% Antonymy in distributional semantics
+% ============================================================================
+
+@article{charles1989contexts, author={Charles, Walter G. and Miller, George A.}, title={Contexts of antonymous adjectives}, journal={Applied Psycholinguistics}, volume={10}, number={3}, pages={357--375}, year={1989}, doi={10.1017/S0142716400008675}}
+
+@article{justeson-katz-1991-co,
+    title = "Co-occurrences of Antonymous Adjectives and Their Contexts",
+    author = "Justeson, John S.  and
+      Katz, Slava M.",
+    journal = "Computational Linguistics",
+    volume = "17",
+    number = "1",
+    year = "1991",
+    url = "https://aclanthology.org/J91-1001/",
+    pages = "1--20"
+}
+
+@article{mohammad-etal-2013-computing,
+    title = "Computing Lexical Contrast",
+    author = "Mohammad, Saif M.  and
+      Dorr, Bonnie J.  and
+      Hirst, Graeme  and
+      Turney, Peter D.",
+    journal = "Computational Linguistics",
+    volume = "39",
+    number = "3",
+    month = sep,
+    year = "2013",
+    address = "Cambridge, MA",
+    publisher = "MIT Press",
+    url = "https://aclanthology.org/J13-3004/",
+    doi = "10.1162/COLI_a_00143",
+    pages = "555--590"
+}
+
+@inproceedings{yih-etal-2012-polarity,
+    title = "Polarity Inducing Latent Semantic Analysis",
+    author = "Yih, Wen-tau  and
+      Zweig, Geoffrey  and
+      Platt, John",
+    editor = "Tsujii, Jun{'}ichi  and
+      Henderson, James  and
+      Pa{\c{s}}ca, Marius",
+    booktitle = "Proceedings of the 2012 Joint Conference on Empirical Methods in Natural Language Processing and Computational Natural Language Learning",
+    month = jul,
+    year = "2012",
+    address = "Jeju Island, Korea",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/D12-1111/",
+    pages = "1212--1222"
+}
+
+@inproceedings{cao-etal-2025-distinctive,
+    title = "On the Distinctive Co-occurrence Characteristics of Antonymy",
+    author = "Cao, Zhihan  and
+      Yamada, Hiroaki  and
+      Tokunaga, Takenobu",
+    editor = "Frermann, Lea  and
+      Stevenson, Mark",
+    booktitle = "Proceedings of the 14th Joint Conference on Lexical and Computational Semantics (*{SEM} 2025)",
+    month = nov,
+    year = "2025",
+    address = "Suzhou, China",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2025.starsem-1.10/",
+    doi = "10.18653/v1/2025.starsem-1.10",
+    pages = "134--141",
+    ISBN = "979-8-89176-340-1"
+}
+
+
+% ============================================================================
+% Antonym pairs as semantic axes; low-dimensional polarity structure
+% ============================================================================
+
+@inproceedings{kim-de-marneffe-2013-deriving,
+    title = "Deriving Adjectival Scales from Continuous Space Word Representations",
+    author = "Kim, Joo-Kyung  and
+      de Marneffe, Marie-Catherine",
+    editor = "Yarowsky, David  and
+      Baldwin, Timothy  and
+      Korhonen, Anna  and
+      Livescu, Karen  and
+      Bethard, Steven",
+    booktitle = "Proceedings of the 2013 Conference on Empirical Methods in Natural Language Processing",
+    month = oct,
+    year = "2013",
+    address = "Seattle, Washington, USA",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/D13-1169/",
+    pages = "1625--1630"
+}
+
+@inproceedings{rothe-etal-2016-ultradense,
+    title = "Ultradense Word Embeddings by Orthogonal Transformation",
+    author = {Rothe, Sascha  and
+      Ebert, Sebastian  and
+      Sch{\"u}tze, Hinrich},
+    editor = "Knight, Kevin  and
+      Nenkova, Ani  and
+      Rambow, Owen",
+    booktitle = "Proceedings of the 2016 Conference of the {N}orth {A}merican Chapter of the {A}ssociation for {C}omputational {L}inguistics: Human Language Technologies",
+    month = jun,
+    year = "2016",
+    address = "San Diego, California",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/N16-1091/",
+    doi = "10.18653/v1/N16-1091",
+    pages = "767--777"
+}
+
+@inproceedings{an-etal-2018-semaxis,
+    title = "{S}em{A}xis: A Lightweight Framework to Characterize Domain-Specific Word Semantics Beyond Sentiment",
+    author = "An, Jisun  and
+      Kwak, Haewoon  and
+      Ahn, Yong-Yeol",
+    editor = "Gurevych, Iryna  and
+      Miyao, Yusuke",
+    booktitle = "Proceedings of the 56th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)",
+    month = jul,
+    year = "2018",
+    address = "Melbourne, Australia",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/P18-1228/",
+    doi = "10.18653/v1/P18-1228",
+    pages = "2450--2461"
+}
+
+@inproceedings{mathew2020polar, author={Mathew, Binny and Sikdar, Sandipan and Lemmerich, Florian and Strohmaier, Markus}, title={The {POLAR} Framework: Polar Opposites Enable Interpretability of Pre-Trained Word Embeddings}, booktitle={Proceedings of The Web Conference 2020 (WWW '20)}, pages={1548--1558}, year={2020}, publisher={ACM}, doi={10.1145/3366423.3380227}}
+
+@article{kozlowski2019geometry, author={Kozlowski, Austin C. and Taddy, Matt and Evans, James A.}, title={The Geometry of Culture: Analyzing the Meanings of Class through Word Embeddings}, journal={American Sociological Review}, volume={84}, number={5}, pages={905--949}, year={2019}, doi={10.1177/0003122419877135}}
+
+@article{grand2022semantic, author={Grand, Gabriel and Blank, Idan Asher and Pereira, Francisco and Fedorenko, Evelina}, title={Semantic projection recovers rich human knowledge of multiple object features from word embeddings}, journal={Nature Human Behaviour}, volume={6}, number={7}, pages={975--987}, year={2022}, doi={10.1038/s41562-022-01316-8}}
+
+@article{kozlowski2025semantic, author={Kozlowski, Austin C. and Dai, Callin and Boutyline, Andrei}, title={Semantic Structure in Large Language Model Embeddings}, journal={arXiv preprint arXiv:2508.10003}, year={2025}}
+
+
+% ============================================================================
+% Linear representation hypothesis, function vectors, relation probing in LMs
+% ============================================================================
+
+@inproceedings{park2024linear, author={Park, Kiho and Choe, Yo Joong and Veitch, Victor}, title={The Linear Representation Hypothesis and the Geometry of Large Language Models}, booktitle={Proceedings of the 41st International Conference on Machine Learning (ICML)}, series={Proceedings of Machine Learning Research}, volume={235}, pages={39643--39666}, year={2024}, publisher={PMLR}, url={https://proceedings.mlr.press/v235/park24c.html}}
+
+@inproceedings{todd2024function, author={Todd, Eric and Li, Millicent L. and Sharma, Arnab Sen and Mueller, Aaron and Wallace, Byron C. and Bau, David}, title={Function Vectors in Large Language Models}, booktitle={International Conference on Learning Representations (ICLR)}, year={2024}, url={https://openreview.net/forum?id=AwyxtyMwaG}}
+
+@inproceedings{hernandez2024linearity, author={Hernandez, Evan and Sharma, Arnab Sen and Haklay, Tal and Meng, Kevin and Wattenberg, Martin and Andreas, Jacob and Belinkov, Yonatan and Bau, David}, title={Linearity of Relation Decoding in Transformer Language Models}, booktitle={International Conference on Learning Representations (ICLR)}, year={2024}, url={https://openreview.net/forum?id=w7LU2s14kE}}
+
+@inproceedings{engels2025not, author={Engels, Joshua and Michaud, Eric J. and Liao, Isaac and Gurnee, Wes and Tegmark, Max}, title={Not All Language Model Features Are One-Dimensionally Linear}, booktitle={International Conference on Learning Representations (ICLR)}, year={2025}, url={https://openreview.net/forum?id=d63a4AM4hb}}
+
+@inproceedings{hollinsworth-etal-2024-language,
+    title = "Language Models Linearly Represent Sentiment",
+    author = "Tigges, Curt  and
+      Hollinsworth, Oskar J.  and
+      Geiger, Atticus  and
+      Nanda, Neel",
+    editor = "Belinkov, Yonatan  and
+      Kim, Najoung  and
+      Jumelet, Jaap  and
+      Mohebbi, Hosein  and
+      Mueller, Aaron  and
+      Chen, Hanjie",
+    booktitle = "Proceedings of the 7th {B}lackbox{NLP} Workshop: Analyzing and Interpreting Neural Networks for {NLP}",
+    month = nov,
+    year = "2024",
+    address = "Miami, Florida, US",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2024.blackboxnlp-1.5/",
+    doi = "10.18653/v1/2024.blackboxnlp-1.5",
+    pages = "58--87"
+}
+
+@article{lindsey2025biology, author={Lindsey, Jack and Gurnee, Wes and Ameisen, Emmanuel and Chen, Brian and Pearce, Adam and Turner, Nicholas L. and Citro, Craig and Abrahams, David and Carter, Shan and Hosmer, Basil and Marcus, Jonathan and Sklar, Michael and Templeton, Adly and Bricken, Trenton and McDougall, Callum and Cunningham, Hoagy and Henighan, Thomas and Jermyn, Adam and Jones, Andy and Persic, Andrew and Qi, Zhenyi and Thompson, T. Ben and Zimmerman, Sam and Rivoire, Kelley and Conerly, Thomas and Olah, Chris and Batson, Joshua}, title={On the Biology of a Large Language Model}, journal={Transformer Circuits Thread}, year={2025}, url={https://transformer-circuits.pub/2025/attribution-graphs/biology.html}}
+
+@article{cao2025comprehensive, author={Cao, Zhihan and Yamada, Hiroaki and Teufel, Simone and Tokunaga, Takenobu}, title={A comprehensive evaluation of semantic relation knowledge of pretrained language models and humans}, journal={Language Resources and Evaluation}, volume={59}, number={4}, pages={3799--3849}, year={2025}, doi={10.1007/s10579-025-09858-9}}
+
+@article{cao2026relation, author={Cao, Zhihan and Yamada, Hiroaki and Teufel, Simone and Hiraoka, Tatsuya and Inui, Kentaro and Yanaka, Hitomi and Tokunaga, Takenobu}, title={Relation Geometry in Semantic Space of Language Models}, journal={arXiv preprint arXiv:2607.26762}, year={2026}}
+
+@article{diera2026language, author={Diera, Andor and Scherp, Ansgar}, title={Do Language Models Encode Semantic Relations? Probing and Sparse Feature Analysis}, journal={arXiv preprint arXiv:2603.17624}, year={2026}, note={Accepted at LREC 2026 according to the arXiv comment}}
+

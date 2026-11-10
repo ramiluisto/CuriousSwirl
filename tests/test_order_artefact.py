@@ -188,3 +188,17 @@ def test_seeded_umap_draws_row_order_from_iid_noise():
     shuffled_edges = reoptimise_layout(reducer, X, edge_order="random", seed=42)
     assert rank_locality(shuffled_edges)["ratio"] > 0.8
     assert neighbour_label_agreement(shuffled_edges, blocks)["agreement"] < 0.3
+
+
+@pytest.mark.timeout(600)
+def test_shuffle_rows_option_returns_coordinates_in_original_row_order():
+    """`shuffle_rows=True` fits on permuted rows but hands back aligned coordinates."""
+    from semsim.projections import compute_umap_projection
+
+    rng = np.random.default_rng(0)
+    X = np.vstack([rng.normal(-4, 1, (150, 10)), rng.normal(4, 1, (150, 10))]).astype(np.float32)
+    labels = np.repeat([0, 1], 150)
+    coords = compute_umap_projection(X, n_neighbors=15, min_dist=0.1, shuffle_rows=True)
+    assert coords.shape == (300, 2)
+    # Two well-separated blobs: if the rows were not restored the labels would be scrambled.
+    assert neighbour_label_agreement(coords, labels)["agreement"] > 0.97

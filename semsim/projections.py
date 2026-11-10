@@ -87,7 +87,8 @@ def compute_tsne_projection(
 
 def compute_umap_projection(
     X: np.ndarray, n_neighbors: int = 50, min_dist: float = 0.01,
-    n_components: int = 2, metric: str = "euclidean"
+    n_components: int = 2, metric: str = "euclidean",
+    shuffle_rows: bool = False,
 ) -> np.ndarray:
     """Compute UMAP projection.
 
@@ -97,6 +98,14 @@ def compute_umap_projection(
         min_dist: Minimum distance for UMAP.
         n_components: Number of output dimensions (2 or 3).
         metric: Distance metric ("euclidean" or "cosine").
+        shuffle_rows: Fit UMAP on a random permutation of the rows and return
+            the coordinates in the original row order.  With a fixed
+            ``random_state``, umap-learn < 0.6 visits the graph edges in row
+            order, and on hub-dominated data the layout then follows the row
+            order of ``X`` (see ``semsim.order_artefact``).  Shuffling stops
+            classes that are stored as contiguous row blocks from showing up
+            as separate regions for that reason alone.  The default (False)
+            reproduces the figures of the paper.
 
     Returns:
         coords: Array of shape (n_samples, n_components).
@@ -117,7 +126,13 @@ def compute_umap_projection(
         n_components=n_components, n_neighbors=n_neighbors, min_dist=min_dist,
         metric=metric, random_state=42,
     )
-    coords = reducer.fit_transform(X)
+    if shuffle_rows:
+        from semsim.order_artefact import random_permutation
+
+        perm, inverse = random_permutation(X.shape[0], seed=0)
+        coords = reducer.fit_transform(X[perm])[inverse]
+    else:
+        coords = reducer.fit_transform(X)
     logger.info("UMAP: %d samples, %dD, n_neighbors=%d, metric=%s",
                 X.shape[0], n_components, n_neighbors, metric)
     return coords
