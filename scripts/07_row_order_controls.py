@@ -33,10 +33,14 @@ Usage:
     python scripts/07_row_order_controls.py --models bert-base-cased word2vec
     python scripts/07_row_order_controls.py --synthetic-only
 
-The first three interventions work with any umap-learn version; the two
-``sgd_*`` arms need umap-learn < 0.6 and are skipped otherwise.  To compare
-library versions, run the script once per environment with different
-``--out-dir`` values.
+The ``paper``, ``rows_permuted`` and ``norm_noise`` arms work with any
+umap-learn version; the two ``sgd_*`` arms need umap-learn < 0.6 and are
+skipped otherwise.  To compare library versions or optimisers, run the script
+once per configuration with different ``--out-dir`` values, e.g. with
+umap-learn >= 0.6:
+
+    python scripts/07_row_order_controls.py --umap-optimizer adam \
+        --out-dir results/row_order_controls_adam
 """
 
 import argparse
@@ -95,6 +99,7 @@ DISPLAY = {
 }
 ARMS = ["paper", "rows_permuted", "sgd_row_order", "sgd_random_order", "norm_noise"]
 N_NEIGHBORS, MIN_DIST, SEED = 30, 0.1, 42
+UMAP_KWARGS = {}  # extra umap.UMAP arguments, set by --umap-optimizer
 
 
 # ---------------------------------------------------------------------------
@@ -124,10 +129,11 @@ def load_bundle(model, input_type="difference", return_pairs=False):
 def layout_stats(coords, labels, splits, order=None):
     """Diagnostics of one layout; ``order`` is the row order UMAP was given."""
     real = np.isin(labels, REAL_TYPES)
+    agreement = neighbour_label_agreement(coords, labels)
     stats = {
-        "rank_locality_ratio": rank_locality(coords, order=order)["ratio"],
-        "label_agreement": neighbour_label_agreement(coords, labels)["agreement"],
-        "label_agreement_chance": neighbour_label_agreement(coords, labels)["chance"],
+        "rank_locality_ratio": float(rank_locality(coords, order=order)["ratio"]),
+        "label_agreement": agreement["agreement"],
+        "label_agreement_chance": agreement["chance"],
     }
     y = (labels[real] == "antonyms").astype(int)
     for k in (2, 20):
@@ -217,11 +223,11 @@ def run_model(model, force=False):
     layouts, stats = {}, {"n": n, "d": d, "arms": {}}
 
     t0 = time.time()
-    layouts["paper"], reducer = fit_umap(X, N_NEIGHBORS, MIN_DIST, seed=SEED)
+    layouts["paper"], reducer = fit_umap(X, N_NEIGHBORS, MIN_DIST, seed=SEED, **UMAP_KWARGS)
     stats["arms"]["paper"] = layout_stats(layouts["paper"], labels, splits)
     logger.info("  paper            %.0fs %s", time.time() - t0, stats["arms"]["paper"])
 
-    if supports_layout_reoptimisation():
+    if supports_layout_reoptimisation() and not UMAP_KWARGS:
         for arm, edge_order in (("sgd_row_order", "row"), ("sgd_random_order", "random")):
             t0 = time.time()
             layouts[arm] = reoptimise_layout(reducer, X, edge_order=edge_order, seed=SEED)
@@ -231,15 +237,16 @@ def run_model(model, force=False):
 
     t0 = time.time()
     perm, inverse = random_permutation(n, seed=0)
-    permuted, _ = fit_umap(X[perm], N_NEIGHBORS, MIN_DIST, seed=SEED)
+    permuted, _ = fit_umap(X[perm], N_NEIGHBORS, MIN_DIST, seed=SEED, **UMAP_KWARGS)
     layouts["rows_permuted"] = permuted[inverse]
     stats["arms"]["rows_permuted"] = layout_stats(layouts["rows_permuted"], labels, splits, order=perm)
-    stats["arms"]["rows_permuted"]["rank_locality_ratio_wrt_original_order"] = rank_locality(
-        layouts["rows_permuted"])["ratio"]
+    stats["arms"]["rows_permuted"]["rank_locality_ratio_wrt_original_order"] = float(rank_locality(
+        layouts["rows_permuted"])["ratio"])
     logger.info("  rows_permuted    %.0fs %s", time.time() - t0, stats["arms"]["rows_permuted"])
 
     t0 = time.time()
-    layouts["norm_noise"], _ = fit_umap(norm_matched_noise(X, seed=0), N_NEIGHBORS, MIN_DIST, seed=SEED)
+    layouts["norm_noise"], _ = fit_umap(norm_matched_noise(X, seed=0), N_NEIGHBORS, MIN_DIST, seed=SEED,
+                                          **UMAP_KWARGS)
     stats["arms"]["norm_noise"] = layout_stats(layouts["norm_noise"], labels, splits)
     logger.info("  norm_noise       %.0fs %s", time.time() - t0, stats["arms"]["norm_noise"])
 
@@ -262,14 +269,14 @@ def run_synthetic(n=16000, d=300, sigma=0.25):
     labels = np.repeat(np.array(PAIR_TYPES), n // 4)
     splits = np.where(np.random.default_rng(0).random(n) < 0.7, "train", "test")
     layouts, stats = {}, {"n": n, "d": d, "sigma": sigma, "arms": {}}
-    layouts["paper"], reducer = fit_umap(X, N_NEIGHBORS, MIN_DIST, seed=SEED)
-    if supports_layout_reoptimisation():
+    layouts["paper"], reducer = fit_umap(X, N_NEIGHBORS, MIN_DIST, seed=SEED, **UMAP_KWARGS)
+    if supports_layout_reoptimisation() and not UMAP_KWARGS:
         layouts["sgd_random_order"] = reoptimise_layout(reducer, X, edge_order="random", seed=SEED)
     perm, inverse = random_permutation(n, seed=0)
-    permuted, _ = fit_umap(X[perm], N_NEIGHBORS, MIN_DIST, seed=SEED)
+    permuted, _ = fit_umap(X[perm], N_NEIGHBORS, MIN_DIST, seed=SEED, **UMAP_KWARGS)
     layouts["rows_permuted"] = permuted[inverse]
     homogeneous = scale_mixture_noise(n, d, sigma=0.0, seed=1)
-    layouts["equal_norms"], _ = fit_umap(homogeneous, N_NEIGHBORS, MIN_DIST, seed=SEED)
+    layouts["equal_norms"], _ = fit_umap(homogeneous, N_NEIGHBORS, MIN_DIST, seed=SEED, **UMAP_KWARGS)
     for arm, coords in layouts.items():
         stats["arms"][arm] = layout_stats(coords, labels, splits, order=perm if arm == "rows_permuted" else None)
         logger.info("  synthetic %-16s %s", arm, stats["arms"][arm])
@@ -375,7 +382,12 @@ def main():
     parser.add_argument("--force", action="store_true", help="recompute even if cached")
     parser.add_argument("--out-dir", type=Path, default=None,
                         help="output directory (default: results/row_order_controls)")
+    parser.add_argument("--umap-optimizer", default=None,
+                        help="umap-learn >= 0.6 only: layout optimiser, e.g. 'adam' or 'momentum'. "
+                             "Use a separate --out-dir, results are cached per directory.")
     args = parser.parse_args()
+    if args.umap_optimizer:
+        UMAP_KWARGS["optimizer"] = args.umap_optimizer
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s", datefmt="%H:%M:%S")
     if args.out_dir is not None:
         global OUT_DIR
@@ -384,8 +396,8 @@ def main():
 
     import umap
 
-    summary = {"umap_learn_version": umap.__version__, "n_neighbors": N_NEIGHBORS,
-               "min_dist": MIN_DIST, "random_state": SEED, "models": {}}
+    summary = {"umap_learn_version": umap.__version__, "umap_kwargs": dict(UMAP_KWARGS),
+               "n_neighbors": N_NEIGHBORS, "min_dist": MIN_DIST, "random_state": SEED, "models": {}}
 
     logger.info("Synthetic null")
     summary["synthetic"], synthetic_layouts, synthetic_labels = run_synthetic()

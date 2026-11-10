@@ -113,6 +113,8 @@ def average(results):
             return {k: walk([item[k] for item in items]) for k in first}
         if isinstance(first, list):
             return [walk([item[i] for item in items]) for i in range(len(first))]
+        if any(item is None for item in items):
+            return None
         return {"mean": float(np.mean(items)), "sd": float(np.std(items))}
     return walk(results)
 

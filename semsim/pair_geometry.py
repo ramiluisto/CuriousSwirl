@@ -63,7 +63,8 @@ def word_overlap_vote(pairs: PairList, y: Sequence[int], train: np.ndarray, test
     with tied votes) get the training majority class.
 
     Returns the accuracy, the fraction of test pairs that share a word with a
-    training pair (``coverage``) and the accuracy on that covered subset.
+    training pair (``coverage``) and the accuracy on that covered subset
+    (``None`` when no test pair is covered, as on a word-disjoint split).
     """
     y = np.asarray(y)
     votes = defaultdict(Counter)
@@ -87,7 +88,7 @@ def word_overlap_vote(pairs: PairList, y: Sequence[int], train: np.ndarray, test
     return {
         "accuracy": float((predictions == truth).mean()),
         "coverage": float(covered.mean()),
-        "accuracy_covered": float((predictions[covered] == truth[covered]).mean()) if covered.any() else float("nan"),
+        "accuracy_covered": float((predictions[covered] == truth[covered]).mean()) if covered.any() else None,
     }
 
 

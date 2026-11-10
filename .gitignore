@@ -219,7 +219,7 @@ results/classification/
 results/projections/
 results/images/
 results/row_order_controls/
-results/row_order_controls_umap060/
+results/row_order_controls_*/
 results/projection_free/
 results/stuttgart_processed.csv
 results/vocabulary.txt

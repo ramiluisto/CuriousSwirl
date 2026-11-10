@@ -2,9 +2,11 @@
 
 Background
 ----------
-With a fixed ``random_state``, umap-learn < 0.6 optimises the 2-D layout with
+With a fixed ``random_state``, umap-learn 0.5.x optimises the 2-D layout with
 a *sequential* stochastic-gradient sweep that visits the graph edges in row
-order (edges sorted by head vertex, then by tail vertex).  When the k-nearest-
+order (edges sorted by head vertex, then by tail vertex).  umap-learn 0.6 keeps
+that optimiser as its default and adds order-independent alternatives
+(``optimizer="adam"`` or ``"momentum"``).  When the k-nearest-
 neighbour graph is dominated by a few hub points -- which is what happens for
 difference vectors in high dimension under the Euclidean metric, because the
 shortest vectors are close to everything -- each hub is dragged through the
@@ -248,7 +250,12 @@ def scale_mixture_noise(n: int, d: int, sigma: float = 0.25, seed: int = 0) -> n
 # ---------------------------------------------------------------------------
 
 def supports_layout_reoptimisation() -> bool:
-    """True for umap-learn < 0.6, whose SGD stage is driven by plain edge arrays."""
+    """True for umap-learn < 0.6, whose SGD stage is driven by plain edge arrays.
+
+    umap-learn 0.6 keeps this optimiser as its default ("compatibility") layout
+    but with a different internal interface, and adds ``optimizer="adam"`` and
+    ``"momentum"``, which shuffle the node order every epoch.
+    """
     import umap
 
     major, minor = (int(part) for part in umap.__version__.split(".")[:2])
@@ -256,13 +263,17 @@ def supports_layout_reoptimisation() -> bool:
 
 
 def fit_umap(X: np.ndarray, n_neighbors: int = 30, min_dist: float = 0.1,
-             metric: str = "euclidean", seed: int = 42):
-    """Fit UMAP exactly as the paper pipeline does and return ``(coords, reducer)``."""
+             metric: str = "euclidean", seed: int = 42, **umap_kwargs):
+    """Fit UMAP exactly as the paper pipeline does and return ``(coords, reducer)``.
+
+    Extra keyword arguments go to ``umap.UMAP``; for example ``optimizer="adam"``
+    selects the order-independent optimiser of umap-learn >= 0.6.
+    """
     import umap
 
     n_neighbors = min(n_neighbors, X.shape[0] - 1)
     reducer = umap.UMAP(n_components=2, n_neighbors=n_neighbors, min_dist=min_dist,
-                        metric=metric, random_state=seed)
+                        metric=metric, random_state=seed, **umap_kwargs)
     coords = reducer.fit_transform(X)
     return coords, reducer
 
@@ -276,7 +287,8 @@ def reoptimise_layout(reducer, X: np.ndarray, edge_order: str = "random", seed: 
 
     Parameters
     ----------
-    reducer : fitted ``umap.UMAP`` (from :func:`fit_umap`).
+    reducer : fitted ``umap.UMAP`` (from :func:`fit_umap`), on at least 4096
+        rows so that umap-learn has stored its neighbour lists.
     X : the matrix the reducer was fitted on.
     edge_order : ``"row"`` keeps umap-learn's native order (sorted by head
         vertex, then tail vertex); ``"random"`` shuffles the edge list once.
@@ -285,6 +297,10 @@ def reoptimise_layout(reducer, X: np.ndarray, edge_order: str = "random", seed: 
         raise RuntimeError("reoptimise_layout relies on umap-learn < 0.6 internals")
     if edge_order not in ("row", "random"):
         raise ValueError(f"unknown edge_order: {edge_order}")
+    if getattr(reducer, "_knn_indices", None) is None:
+        # Below 4096 rows umap-learn computes all pairwise distances and keeps
+        # no neighbour lists to rebuild the initialisation from.
+        raise ValueError("reoptimise_layout needs a model fitted on at least 4096 rows")
 
     import umap
     from umap.layouts import optimize_layout_euclidean

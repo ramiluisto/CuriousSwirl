@@ -107,3 +107,10 @@ def test_pair_graph_summary_counts_duplicates_and_reversals():
     assert summary["frac_exact_duplicates"] == pytest.approx(0.25)
     assert summary["frac_with_reverse_present"] == pytest.approx(0.75)
     assert summary["max_pairs_per_word"] == 3
+
+
+def test_word_overlap_vote_reports_none_when_nothing_is_covered():
+    pairs = [("a", "b"), ("c", "d")]
+    result = word_overlap_vote(pairs, np.array([0, 1]), np.array([True, False]), np.array([False, True]))
+    assert result["coverage"] == 0.0
+    assert result["accuracy_covered"] is None
