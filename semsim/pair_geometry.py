@@ -206,6 +206,24 @@ def second_moment_contrast(D: np.ndarray, y: np.ndarray, train: np.ndarray, test
 # Dataset structure
 # ---------------------------------------------------------------------------
 
+NEGATIVE_PREFIXES = ("un", "in", "im", "il", "ir", "dis", "non", "mis", "de", "anti", "a", "ab")
+
+
+def is_derived_pair(a: str, b: str) -> bool:
+    """True if one word is the other plus a negative prefix, or a -ful/-less pair.
+
+    A deliberately simple string test for morphologically derived antonyms
+    (*able/unable*, *honest/dishonest*, *careful/careless*).
+    """
+    a, b = a.lower(), b.lower()
+    for longer, shorter in ((a, b), (b, a)):
+        if any(longer in (prefix + shorter, prefix + "-" + shorter) for prefix in NEGATIVE_PREFIXES):
+            return True
+        if longer.endswith("less") and shorter.endswith("ful") and longer[:-4] == shorter[:-3]:
+            return True
+    return False
+
+
 def pair_graph_summary(pairs: PairList) -> Dict[str, float]:
     """Word-reuse statistics of a list of pairs."""
     degree = Counter(w for pair in pairs for w in pair)

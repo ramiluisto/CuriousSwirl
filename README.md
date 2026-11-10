@@ -107,6 +107,28 @@ python scripts/generate_cosine_sim_plots.py   # Figure 1: cosine similarity viol
 
 These scripts produce the paper's key visual results (including the "swirl") and save them to `results/images/`. The static paper figures are included in `prose/img/` for reference. To regenerate the full five-model figure set, install GloVe first — several paper panels depend on it.
 
+## Row-Order Controls (read before interpreting the swirl)
+
+A later analysis of this repository found that the swirl follows the **row order of
+the data matrix**: with a fixed `random_state`, umap-learn < 0.6 visits the graph
+edges in row order, and on the hub-dominated neighbour graph of the difference
+vectors this lays the points out along a curve traced in storage order. Because the
+four pair types are stacked as four row blocks, they appear as separate coloured
+filaments. Shuffling the rows of the same matrix keeps the filament and mixes the
+colours; i.i.d. noise with unequal norms produces the same picture. See
+[`analysis/README.md`](./analysis/README.md) for the evidence, the consequences for
+the classification tables, a projection-free analysis of what the embeddings do
+show, and a review of related literature.
+
+```bash
+python scripts/07_row_order_controls.py          # permuted rows, shuffled edge order, noise nulls
+python scripts/08_projection_free_analysis.py    # probes and second-moment contrast, no projection
+python scripts/generate_hp_grid.py --model bert-base-cased --shuffle-rows
+```
+
+The default figure scripts are unchanged and still reproduce the figures of the
+paper.
+
 ## Generating Custom UMAP Grids
 
 You can generate UMAP hyperparameter grids for any model using the dedicated script:
@@ -125,6 +147,9 @@ python scripts/generate_hp_grid.py --model text-embedding-3-large \
 
 # Save to a custom directory
 python scripts/generate_hp_grid.py --model glove --output-dir my_figures/
+
+# Row-order control: fit UMAP on shuffled rows (written to a separate file)
+python scripts/generate_hp_grid.py --model bert-base-cased --shuffle-rows
 ```
 
 Available models: `word2vec`, `glove`, `bert-base-cased`, `text-embedding-3-small`, `text-embedding-3-large`.

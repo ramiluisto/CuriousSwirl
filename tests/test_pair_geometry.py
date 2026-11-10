@@ -114,3 +114,18 @@ def test_word_overlap_vote_reports_none_when_nothing_is_covered():
     result = word_overlap_vote(pairs, np.array([0, 1]), np.array([True, False]), np.array([False, True]))
     assert result["coverage"] == 0.0
     assert result["accuracy_covered"] is None
+
+
+@pytest.mark.parametrize("a,b,expected", [
+    ("able", "unable", True),
+    ("dishonest", "honest", True),
+    ("careful", "careless", True),
+    ("Possible", "impossible", True),
+    ("hot", "cold", False),
+    ("under", "over", False),
+    ("in", "out", False),
+])
+def test_is_derived_pair(a, b, expected):
+    from semsim.pair_geometry import is_derived_pair
+
+    assert is_derived_pair(a, b) is expected

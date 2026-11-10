@@ -17,6 +17,9 @@ word-disjoint ("lexical") splits,
     The words at the two ends of the leading directions are listed, and the
     agreement between models is measured on words held out from fitting.
 
+With --derived-check the script only tests whether the leading direction is
+carried by morphologically derived antonyms (un-, in-, dis-, -less).
+
 Usage:
     python scripts/08_projection_free_analysis.py
     python scripts/08_projection_free_analysis.py --models word2vec --lexical-seeds 5
@@ -42,6 +45,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from config import MODELS, RESULTS_DIR, get_embedding_path
 from semsim.pair_geometry import (
+    is_derived_pair,
     lexical_split,
     pair_graph_summary,
     probe_accuracies,
@@ -149,6 +153,44 @@ def run_model(model, lexical_seeds):
     return out, held_out_words
 
 
+def derived_antonym_check(model, lexical_seeds):
+    """Is the leading contrast direction just the morphology of un-/in-/dis- pairs?
+
+    Reports, on word-disjoint splits, how well |projection on the leading
+    direction| separates synonyms from derived antonyms and from all other
+    antonyms, and the rank-1 accuracy when every derived pair is removed from
+    both training and test.
+    """
+    from sklearn.metrics import roc_auc_score
+
+    pairs, E1, E2, y, _splits = load_real_pairs(model)
+    derived = np.array([is_derived_pair(a, b) for a, b in pairs])
+    D = E2 - E1
+    runs = []
+    for seed in range(lexical_seeds):
+        train, test = lexical_split(pairs, test_size=LEXICAL_TEST_SIZE, seed=seed)
+        scaled = D / (D[train].std(axis=0) + 1e-12)
+        contrast = second_moment_contrast(scaled, y, train, test, ranks=(1,))
+        unit = scaled / np.linalg.norm(scaled, axis=1, keepdims=True)
+        score = np.abs(unit @ contrast["directions"][:, 0])
+        synonyms = test & (y == 0)
+        auc = {}
+        for name, antonyms in (("derived", test & (y == 1) & derived), ("other", test & (y == 1) & ~derived)):
+            subset = synonyms | antonyms
+            auc[name] = float(roc_auc_score(y[subset], score[subset]))
+        without = second_moment_contrast(scaled, y, train & ~derived, test & ~derived, ranks=(1,))
+        runs.append({
+            "auc_derived_antonyms": auc["derived"],
+            "auc_other_antonyms": auc["other"],
+            "rank1_accuracy": contrast["accuracy_by_rank"][1],
+            "rank1_accuracy_without_derived_pairs": without["accuracy_by_rank"][1],
+        })
+    result = average(runs)
+    result["frac_antonym_pairs_derived"] = float(derived[y == 1].mean())
+    result["frac_synonym_pairs_derived"] = float(derived[y == 0].mean())
+    return result
+
+
 def cross_model_agreement(held_out):
     """|Spearman correlation| between models of held-out word coordinates along the leading direction.
 
@@ -202,9 +244,21 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--models", nargs="+", default=MODELS)
     parser.add_argument("--lexical-seeds", type=int, default=5)
+    parser.add_argument("--derived-check", action="store_true",
+                        help="only run the derived-antonym check and write derived_antonyms.json")
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s", datefmt="%H:%M:%S")
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    if args.derived_check:
+        results = {}
+        for model in args.models:
+            if get_embedding_path(model).exists():
+                results[model] = derived_antonym_check(model, args.lexical_seeds)
+                logger.info("%s: %s", model, json.dumps(results[model]))
+        (OUT_DIR / "derived_antonyms.json").write_text(json.dumps(results, indent=2))
+        logger.info("Wrote %s", OUT_DIR / "derived_antonyms.json")
+        return
 
     summary, held_out = {}, {}
     for model in args.models:

@@ -1,0 +1,102 @@
+{
+  "bert-base-cased": {
+    "auc_derived_antonyms": {
+      "mean": 0.9572662448017356,
+      "sd": 0.01815942768386115
+    },
+    "auc_other_antonyms": {
+      "mean": 0.7475322216564078,
+      "sd": 0.014582041168260616
+    },
+    "rank1_accuracy": {
+      "mean": 0.7154699000949574,
+      "sd": 0.011459632064086197
+    },
+    "rank1_accuracy_without_derived_pairs": {
+      "mean": 0.7161342341203452,
+      "sd": 0.016230559447150426
+    },
+    "frac_antonym_pairs_derived": 0.04783370899073378,
+    "frac_synonym_pairs_derived": 0.00045034902049088043
+  },
+  "word2vec": {
+    "auc_derived_antonyms": {
+      "mean": 0.839204599802841,
+      "sd": 0.032899336112997064
+    },
+    "auc_other_antonyms": {
+      "mean": 0.6540337878671526,
+      "sd": 0.006712473583489481
+    },
+    "rank1_accuracy": {
+      "mean": 0.6508915326043824,
+      "sd": 0.005579714129695631
+    },
+    "rank1_accuracy_without_derived_pairs": {
+      "mean": 0.6467274186147292,
+      "sd": 0.010827831532780632
+    },
+    "frac_antonym_pairs_derived": 0.14314010299749108,
+    "frac_synonym_pairs_derived": 0.0005242463958060288
+  },
+  "glove": {
+    "auc_derived_antonyms": {
+      "mean": 0.80360702087929,
+      "sd": 0.04928454504300463
+    },
+    "auc_other_antonyms": {
+      "mean": 0.6343971216728039,
+      "sd": 0.008851798902723466
+    },
+    "rank1_accuracy": {
+      "mean": 0.6255790684319397,
+      "sd": 0.011220695884440883
+    },
+    "rank1_accuracy_without_derived_pairs": {
+      "mean": 0.6271749024619242,
+      "sd": 0.009516850688249557
+    },
+    "frac_antonym_pairs_derived": 0.14007832898172323,
+    "frac_synonym_pairs_derived": 0.0005148005148005148
+  },
+  "text-embedding-3-small": {
+    "auc_derived_antonyms": {
+      "mean": 0.9489660624337345,
+      "sd": 0.014351610215258291
+    },
+    "auc_other_antonyms": {
+      "mean": 0.7393172346182031,
+      "sd": 0.004921831268451401
+    },
+    "rank1_accuracy": {
+      "mean": 0.722548372639799,
+      "sd": 0.009687610688523184
+    },
+    "rank1_accuracy_without_derived_pairs": {
+      "mean": 0.7235876070083771,
+      "sd": 0.013253489668894614
+    },
+    "frac_antonym_pairs_derived": 0.14393551688843398,
+    "frac_synonym_pairs_derived": 0.0005117707267144319
+  },
+  "text-embedding-3-large": {
+    "auc_derived_antonyms": {
+      "mean": 0.963266192466644,
+      "sd": 0.015756645308175686
+    },
+    "auc_other_antonyms": {
+      "mean": 0.758489248666898,
+      "sd": 0.012219551437565587
+    },
+    "rank1_accuracy": {
+      "mean": 0.7337855514544182,
+      "sd": 0.013142502279540976
+    },
+    "rank1_accuracy_without_derived_pairs": {
+      "mean": 0.7339997843811347,
+      "sd": 0.012572122643290913
+    },
+    "frac_antonym_pairs_derived": 0.14393551688843398,
+    "frac_synonym_pairs_derived": 0.0005117707267144319
+  }
+}

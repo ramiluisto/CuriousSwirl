@@ -1,0 +1,407 @@
+{
+ "umap_learn_version": "0.6.0",
+ "umap_kwargs": {
+  "optimizer": "adam"
+ },
+ "n_neighbors": 30,
+ "min_dist": 0.1,
+ "random_state": 42,
+ "models": {
+  "bert-base-cased": {
+   "n": 16868,
+   "d": 768,
+   "arms": {
+    "paper": {
+     "rank_locality_ratio": 0.8754134252586929,
+     "label_agreement": 0.3006817642874081,
+     "label_agreement_chance": 0.2507053892605497,
+     "transductive_acc_k2": 0.5479323308270677,
+     "transductive_acc_k20": 0.5681390977443609
+    },
+    "rows_permuted": {
+     "rank_locality_ratio": 0.9992869550294027,
+     "label_agreement": 0.30134574341949255,
+     "label_agreement_chance": 0.2507053892605497,
+     "transductive_acc_k2": 0.5333646616541353,
+     "transductive_acc_k20": 0.5859962406015038,
+     "rank_locality_ratio_wrt_original_order": 0.8822952880237324
+    },
+    "norm_noise": {
+     "rank_locality_ratio": 0.9989833434368275,
+     "label_agreement": 0.2518970832345269,
+     "label_agreement_chance": 0.2507053892605497,
+     "transductive_acc_k2": 0.5333646616541353,
+     "transductive_acc_k20": 0.5084586466165414
+    }
+   },
+   "raw_space": {
+    "kmeans20_vote_raw_space": 0.6334586466165414,
+    "norm_only_logreg": 0.5305451127819549
+   },
+   "hubness": {
+    "difference_euclidean": {
+     "max_in_degree_frac": 0.9489566042210102,
+     "top1pct_share": 0.6793050297236963,
+     "skewness": 29.042711671347753,
+     "antihub_frac": 0.01001897083234527
+    },
+    "difference_cosine": {
+     "max_in_degree_frac": 0.022231444154612284,
+     "top1pct_share": 0.041533448357632896,
+     "skewness": 2.972918454122138,
+     "antihub_frac": 0.0
+    },
+    "concatenation_euclidean": {
+     "max_in_degree_frac": 0.15532368982689115,
+     "top1pct_share": 0.15296460140809368,
+     "skewness": 17.178988097292095,
+     "antihub_frac": 0.0011263931705003556
+    }
+   },
+   "hub_profile": {
+    "top_hubs": [
+     {
+      "pair": [
+       "north",
+       "south"
+      ],
+      "pair_type": "antonyms",
+      "neighbour_of_frac": 0.9489566042210102,
+      "norm_over_median": 0.36578503251075745
+     },
+     {
+      "pair": [
+       "south",
+       "north"
+      ],
+      "pair_type": "antonyms",
+      "neighbour_of_frac": 0.9472373725397202,
+      "norm_over_median": 0.36567896604537964
+     },
+     {
+      "pair": [
+       "west",
+       "east"
+      ],
+      "pair_type": "antonyms",
+      "neighbour_of_frac": 0.8355465971069481,
+      "norm_over_median": 0.39576947689056396
+     },
+     {
+      "pair": [
+       "west",
+       "east"
+      ],
+      "pair_type": "antonyms",
+      "neighbour_of_frac": 0.8351316101493953,
+      "norm_over_median": 0.39576947689056396
+     },
+     {
+      "pair": [
+       "west",
+       "east"
+      ],
+      "pair_type": "antonyms",
+      "neighbour_of_frac": 0.8349537585961584,
+      "norm_over_median": 0.39576947689056396
+     },
+     {
+      "pair": [
+       "east",
+       "west"
+      ],
+      "pair_type": "antonyms",
+      "neighbour_of_frac": 0.8289068057861039,
+      "norm_over_median": 0.39466285705566406
+     },
+     {
+      "pair": [
+       "east",
+       "west"
+      ],
+      "pair_type": "antonyms",
+      "neighbour_of_frac": 0.8282546834242352,
+      "norm_over_median": 0.39466285705566406
+     },
+     {
+      "pair": [
+       "east",
+       "west"
+      ],
+      "pair_type": "antonyms",
+      "neighbour_of_frac": 0.8280175480199193,
+      "norm_over_median": 0.39466285705566406
+     },
+     {
+      "pair": [
+       "northern",
+       "southern"
+      ],
+      "pair_type": "antonyms",
+      "neighbour_of_frac": 0.7441901825942613,
+      "norm_over_median": 0.42189231514930725
+     },
+     {
+      "pair": [
+       "southern",
+       "northern"
+      ],
+      "pair_type": "antonyms",
+      "neighbour_of_frac": 0.7408702869338393,
+      "norm_over_median": 0.42336294054985046
+     },
+     {
+      "pair": [
+       "theatre",
+       "theater"
+      ],
+      "pair_type": "synonyms",
+      "neighbour_of_frac": 0.5963362580033199,
+      "norm_over_median": 0.4440239369869232
+     },
+     {
+      "pair": [
+       "northeast",
+       "southwest"
+      ],
+      "pair_type": "antonyms",
+      "neighbour_of_frac": 0.4855940241878112,
+      "norm_over_median": 0.4566885530948639
+     }
+    ],
+    "spearman_in_degree_vs_norm": -0.4160023900290982,
+    "top1pct_hubs_by_pair_type": {
+     "antonyms": 117,
+     "shuffled_antonym_words": 1,
+     "shuffled_synonym_words": 0,
+     "synonyms": 50
+    },
+    "frac_neighbours_that_are_top1pct_hubs": {
+     "antonyms": 0.622356365018092,
+     "shuffled_antonym_words": 0.6418819140392238,
+     "shuffled_synonym_words": 0.7254501549045338,
+     "synonyms": 0.7180116314281499
+    }
+   }
+  },
+  "text-embedding-3-small": {
+   "n": 31264,
+   "d": 1536,
+   "arms": {
+    "paper": {
+     "rank_locality_ratio": 0.7856273147297864,
+     "label_agreement": 0.33838920163766634,
+     "label_agreement_chance": 0.25,
+     "transductive_acc_k2": 0.5935104752171692,
+     "transductive_acc_k20": 0.729943791517629
+    },
+    "rows_permuted": {
+     "rank_locality_ratio": 0.9981420151001178,
+     "label_agreement": 0.3370522006141249,
+     "label_agreement_chance": 0.25,
+     "transductive_acc_k2": 0.5063873275421563,
+     "transductive_acc_k20": 0.7301992846193153,
+     "rank_locality_ratio_wrt_original_order": 0.7830063728958254
+    },
+    "norm_noise": {
+     "rank_locality_ratio": 0.9932823521163153,
+     "label_agreement": 0.25075486182190376,
+     "label_agreement_chance": 0.25,
+     "transductive_acc_k2": 0.5104752171691365,
+     "transductive_acc_k20": 0.5022994379151763
+    }
+   },
+   "raw_space": {
+    "kmeans20_vote_raw_space": 0.7133367399080225,
+    "norm_only_logreg": 0.5074092999489014
+   },
+   "hubness": {
+    "difference_euclidean": {
+     "max_in_degree_frac": 0.8514265609007164,
+     "top1pct_share": 0.7012836180425652,
+     "skewness": 36.97642492918166,
+     "antihub_frac": 0.022773797338792222
+    },
+    "difference_cosine": {
+     "max_in_degree_frac": 0.010011514841351075,
+     "top1pct_share": 0.03750595595242297,
+     "skewness": 2.4284266125716836,
+     "antihub_frac": 0.00038382804503582393
+    },
+    "concatenation_euclidean": {
+     "max_in_degree_frac": 0.008060388945752303,
+     "top1pct_share": 0.038858177743267566,
+     "skewness": 1.9357301608318207,
+     "antihub_frac": 3.1985670419651997e-05
+    }
+   },
+   "hub_profile": {
+    "top_hubs": [
+     {
+      "pair": [
+       "rabbinic",
+       "rabbinical"
+      ],
+      "pair_type": "synonyms",
+      "neighbour_of_frac": 0.8514265609007164,
+      "norm_over_median": 0.266505628824234
+     },
+     {
+      "pair": [
+       "haemorrhagic",
+       "hemorrhagic"
+      ],
+      "pair_type": "synonyms",
+      "neighbour_of_frac": 0.742195496417605,
+      "norm_over_median": 0.30124932527542114
+     },
+     {
+      "pair": [
+       "baptise",
+       "baptize"
+      ],
+      "pair_type": "synonyms",
+      "neighbour_of_frac": 0.7126727226202662,
+      "norm_over_median": 0.30732834339141846
+     },
+     {
+      "pair": [
+       "archaeological",
+       "archeological"
+      ],
+      "pair_type": "synonyms",
+      "neighbour_of_frac": 0.7106896110542477,
+      "norm_over_median": 0.30331140756607056
+     },
+     {
+      "pair": [
+       "archeological",
+       "archaeological"
+      ],
+      "pair_type": "synonyms",
+      "neighbour_of_frac": 0.7081627430910952,
+      "norm_over_median": 0.30402541160583496
+     },
+     {
+      "pair": [
+       "disinterested",
+       "uninterested"
+      ],
+      "pair_type": "synonyms",
+      "neighbour_of_frac": 0.6504925793244627,
+      "norm_over_median": 0.3174862265586853
+     },
+     {
+      "pair": [
+       "transplantation",
+       "transplant"
+      ],
+      "pair_type": "synonyms",
+      "neighbour_of_frac": 0.6306614636642784,
+      "norm_over_median": 0.3172978460788727
+     },
+     {
+      "pair": [
+       "vandalise",
+       "vandalize"
+      ],
+      "pair_type": "synonyms",
+      "neighbour_of_frac": 0.6099667349027635,
+      "norm_over_median": 0.3264792263507843
+     },
+     {
+      "pair": [
+       "adaption",
+       "adaptation"
+      ],
+      "pair_type": "synonyms",
+      "neighbour_of_frac": 0.5867771238485159,
+      "norm_over_median": 0.32820501923561096
+     },
+     {
+      "pair": [
+       "slovene",
+       "slovenian"
+      ],
+      "pair_type": "synonyms",
+      "neighbour_of_frac": 0.5741427840327533,
+      "norm_over_median": 0.331451952457428
+     },
+     {
+      "pair": [
+       "geographical",
+       "geographic"
+      ],
+      "pair_type": "synonyms",
+      "neighbour_of_frac": 0.5175281473899693,
+      "norm_over_median": 0.3394789695739746
+     },
+     {
+      "pair": [
+       "stockholder",
+       "shareholder"
+      ],
+      "pair_type": "synonyms",
+      "neighbour_of_frac": 0.5170163766632548,
+      "norm_over_median": 0.3396783173084259
+     }
+    ],
+    "spearman_in_degree_vs_norm": -0.5467272555413977,
+    "top1pct_hubs_by_pair_type": {
+     "antonyms": 241,
+     "shuffled_antonym_words": 0,
+     "shuffled_synonym_words": 0,
+     "synonyms": 71
+    },
+    "frac_neighbours_that_are_top1pct_hubs": {
+     "antonyms": 0.6421663784279815,
+     "shuffled_antonym_words": 0.6400178237391028,
+     "shuffled_synonym_words": 0.7007155966540782,
+     "synonyms": 0.8222346733490983
+    }
+   }
+  }
+ },
+ "synthetic": {
+  "n": 16000,
+  "d": 300,
+  "sigma": 0.25,
+  "arms": {
+   "paper": {
+    "rank_locality_ratio": 0.9937495349982187,
+    "label_agreement": 0.24793125,
+    "label_agreement_chance": 0.25,
+    "transductive_acc_k2": 0.5056133056133056,
+    "transductive_acc_k20": 0.5031185031185031
+   },
+   "rows_permuted": {
+    "rank_locality_ratio": 0.9974838310820643,
+    "label_agreement": 0.249275,
+    "label_agreement_chance": 0.25,
+    "transductive_acc_k2": 0.4960498960498961,
+    "transductive_acc_k20": 0.4914760914760915
+   },
+   "equal_norms": {
+    "rank_locality_ratio": 0.9963101951699985,
+    "label_agreement": 0.25005,
+    "label_agreement_chance": 0.25,
+    "transductive_acc_k2": 0.4968814968814969,
+    "transductive_acc_k20": 0.518918918918919
+   }
+  },
+  "hubness": {
+   "scale_mixture": {
+    "max_in_degree_frac": 0.9365,
+    "top1pct_share": 0.8029547413793103,
+    "skewness": 23.972807188705943,
+    "antihub_frac": 0.815125
+   },
+   "equal_norms": {
+    "max_in_degree_frac": 0.1143125,
+    "top1pct_share": 0.20390086206896552,
+    "skewness": 7.649716615502002,
+    "antihub_frac": 0.17575
+   }
+  }
+ }
+}
