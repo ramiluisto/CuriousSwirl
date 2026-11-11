@@ -1,0 +1,259 @@
+/* Styles for the swirl explorer and the surrounding Quarto page. */
+
+#swirl-explorer {
+  position: relative;
+  margin-top: 0.5rem;
+}
+
+.sx-presetrow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.sx-presets {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.sx-presets .btn.active {
+  background: #495057;
+  color: #fff;
+}
+
+.sx-note {
+  margin: 0.5rem 0 0.75rem;
+  padding: 0.45rem 0.7rem;
+  border-left: 3px solid #adb5bd;
+  background: #f6f7f8;
+  font-size: 0.95rem;
+}
+
+.sx-controls {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem 1rem;
+  align-items: end;
+  margin-bottom: 0.6rem;
+}
+
+.sx-wide {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 760px) {
+  .sx-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.sx-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin: 0;
+}
+
+.sx-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #5c636a;
+}
+
+.sx-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.8rem;
+}
+
+.sx-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.88rem;
+  margin: 0;
+}
+
+.sx-search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sx-searchinfo {
+  font-size: 0.82rem;
+  color: #5c636a;
+  white-space: nowrap;
+}
+
+.sx-swatch {
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 2px;
+}
+
+.sx-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.88rem;
+}
+
+.sx-legend:empty {
+  display: none;
+}
+
+.sx-legenditem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.sx-ramp {
+  border: 1px solid #ced4da;
+}
+
+.sx-hint {
+  color: #5c636a;
+  font-style: italic;
+}
+
+.sx-panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.75rem;
+  justify-items: center;
+}
+
+.sx-panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.sx-title {
+  font-weight: 600;
+}
+
+.sx-blurb {
+  font-size: 0.85rem;
+  line-height: 1.35;
+  color: #495057;
+  min-height: 2.8em;
+  margin-bottom: 0.3rem;
+}
+
+.sx-stage {
+  position: relative;
+  box-sizing: content-box;
+  border: 1px solid #343a40;
+}
+
+.sx-canvas,
+.sx-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.sx-overlay {
+  cursor: crosshair;
+}
+
+.sx-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.1rem 1.2rem;
+  font-size: 0.86rem;
+  margin: 0.35rem 0 0.5rem;
+}
+
+.sx-stats i {
+  color: #6c757d;
+}
+
+.sx-caption {
+  font-size: 0.76rem;
+  color: #5c636a;
+  margin-top: 0.25rem;
+}
+
+.sx-strip,
+.sx-profile {
+  border: 1px solid #adb5bd;
+}
+
+.sx-tooltip {
+  display: none;
+  position: absolute;
+  z-index: 20;
+  width: 300px;
+  padding: 0.45rem 0.6rem;
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid #343a40;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  font-size: 0.82rem;
+  line-height: 1.35;
+  pointer-events: none;
+}
+
+/* Page furniture */
+
+.verdict {
+  border-left: 4px solid #c44e52;
+  background: #fbf3f3;
+  padding: 0.6rem 0.9rem;
+  margin: 0.75rem 0 1rem;
+}
+
+.keep {
+  border-left: 4px solid #55a868;
+  background: #f2f8f3;
+  padding: 0.6rem 0.9rem;
+  margin: 0.75rem 0 1rem;
+}
+
+table {
+  font-size: 0.9rem;
+}
+
+.panel-tabset > .nav-tabs .nav-link {
+  font-weight: 600;
+}
+
+figure img,
+p > img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Compact title block so that the explorer starts high on the page. */
+
+#title-block-header {
+  margin-block-end: 0.75rem;
+}
+
+#title-block-header .quarto-title-meta {
+  display: none;
+}
+
+.sx-foot {
+  font-size: 0.82rem;
+  color: #5c636a;
+  margin-top: 1.5rem;
+}
+
+/* Prose stays at a readable measure; the explorer may use the full width. */
+
+.prose,
+.tab-content > .tab-pane:not(:first-child) {
+  max-width: 64rem;
+}

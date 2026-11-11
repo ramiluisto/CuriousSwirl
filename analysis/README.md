@@ -6,6 +6,11 @@ should the work be placed in the literature? Everything below can be regenerated
 the scripts listed in [section 6](#6-reproducing-this-note). The paper text itself has
 not been touched.
 
+**Interactive version:** [`explorer/swirl_explorer.html`](explorer/swirl_explorer.html)
+is a self-contained page (open it in a browser, no server or network needed) in which
+the layouts of all five models can be compared under different row orderings and
+colourings, with the material of this note and a longer literature review in tabs.
+
 *Provenance: written by an AI coding assistant (Claude) at the author's request. The
 experiments are scripted and the numbers come from `data/`; the literature entries
 were checked against publisher records by search agents. Treat it as a referee
@@ -582,6 +587,10 @@ python scripts/08_projection_free_analysis.py    # section 3     -> results/proj
 python scripts/08_projection_free_analysis.py --derived-check   # derived-antonym check of 3.3
 python scripts/generate_hp_grid.py --model bert-base-cased --shuffle-rows   # the paper's Figure 2, rows shuffled
 pytest tests/test_order_artefact.py tests/test_pair_geometry.py
+
+# the interactive page (needs the Quarto CLI, e.g. `uvx --from quarto-cli quarto`)
+python scripts/09_build_explorer.py              # extra row orderings -> analysis/explorer/explorer_data.js
+quarto render analysis/explorer/swirl_explorer.qmd
 
 # section 1.4, in a separate environment with umap-learn 0.6.0 and pynndescent 0.7.0
 python scripts/07_row_order_controls.py --out-dir results/row_order_controls_umap060

@@ -80,3 +80,42 @@ def _assemble_feature_bundle(data, pair_types, input_type, symmetrize, standardi
         X_all = StandardScaler().fit_transform(X_all)
 
     return X_all, all_labels, all_words1, all_words2
+
+
+#: Row-block order of the paper's projections (pair types sorted alphabetically).
+PAPER_PAIR_TYPES = ["antonyms", "shuffled_antonym_words", "shuffled_synonym_words", "synonyms"]
+
+
+def load_paper_bundle(model_name: str, input_type: str = "difference") -> dict:
+    """Standardised features in the row order of the paper, with per-row metadata.
+
+    Rows are stacked pair type by pair type in ``PAPER_PAIR_TYPES`` order, which
+    is exactly what ``load_features_for_dataset(model, "unfiltered", ...)``
+    feeds to UMAP for the paper figures.
+
+    Returns a dict with ``X`` (float32, standardised), ``labels`` (pair type per
+    row), ``splits`` and ``pos`` (Stuttgart split and part of speech, empty for
+    shuffled pairs), ``pairs`` (word pairs) and ``cosine`` (cosine similarity of
+    the two word embeddings).
+    """
+    data = load_unfiltered_pairs_for_model(model_name)
+    parts, labels, splits, pos, pairs, cosine = [], [], [], [], [], []
+    for pair_type in PAPER_PAIR_TYPES:
+        type_pairs, emb_pairs, meta, split_labels = data[pair_type]
+        n = len(type_pairs)
+        parts.append(build_features(emb_pairs, input_type).astype(np.float32))
+        labels.extend([pair_type] * n)
+        splits.extend(split_labels if split_labels else [""] * n)
+        pos.extend(meta.get("pos") or [""] * n)
+        pairs.extend(type_pairs)
+        for e1, e2 in emb_pairs:
+            cosine.append(float(np.dot(e1, e2) / (np.linalg.norm(e1) * np.linalg.norm(e2) + 1e-12)))
+    X = StandardScaler().fit_transform(np.vstack(parts)).astype(np.float32)
+    return {
+        "X": X,
+        "labels": np.array(labels),
+        "splits": np.array(splits),
+        "pos": np.array(pos),
+        "pairs": pairs,
+        "cosine": np.array(cosine, dtype=np.float32),
+    }

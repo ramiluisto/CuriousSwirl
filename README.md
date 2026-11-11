@@ -121,10 +121,17 @@ colours; i.i.d. noise with unequal norms produces the same picture. See
 the classification tables, a projection-free analysis of what the embeddings do
 show, and a review of related literature.
 
+To explore this yourself, open
+[`analysis/explorer/swirl_explorer.html`](./analysis/explorer/swirl_explorer.html) in a
+browser: a self-contained page with every model's layout under several row orderings
+(as stored, shuffled, sorted alphabetically, ...) and colourings.
+
 ```bash
 python scripts/07_row_order_controls.py          # permuted rows, shuffled edge order, noise nulls
 python scripts/08_projection_free_analysis.py    # probes and second-moment contrast, no projection
 python scripts/generate_hp_grid.py --model bert-base-cased --shuffle-rows
+python scripts/09_build_explorer.py              # data for the interactive page
+quarto render analysis/explorer/swirl_explorer.qmd
 ```
 
 The default figure scripts are unchanged and still reproduce the figures of the

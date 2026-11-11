@@ -48,6 +48,7 @@ def load_unfiltered_pairs_for_model(
         pairs: PairList = []
         emb_pairs: List[Tuple[np.ndarray, np.ndarray]] = []
         split_labels: List[str] = []
+        pos_labels: List[str] = []
 
         for _, row in filtered.iterrows():
             w1, w2 = str(row["word1"]), str(row["word2"])
@@ -55,12 +56,14 @@ def load_unfiltered_pairs_for_model(
                 pairs.append((w1, w2))
                 emb_pairs.append((embeddings[w1], embeddings[w2]))
                 split_labels.append(str(row["split"]))
+                pos_labels.append(str(row["pos"]))
 
         metadata = {
             "pair_type": pair_type,
             "model": model_name,
             "n_pairs": len(pairs),
             "source": "unfiltered_stuttgart",
+            "pos": pos_labels,
         }
 
         result[pair_type] = (pairs, emb_pairs, metadata, split_labels)

@@ -58,12 +58,11 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn.preprocessing import StandardScaler
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from config import MODELS, RESULTS_DIR, get_embedding_path, get_model_slug
-from semsim.classify import build_features
+from semsim.figure_data import load_paper_bundle
 from semsim.order_artefact import (
     exact_knn,
     fit_umap,
@@ -77,7 +76,6 @@ from semsim.order_artefact import (
     supports_layout_reoptimisation,
     transductive_cluster_vote,
 )
-from semsim.unfiltered import load_unfiltered_pairs_for_model
 
 logger = logging.getLogger(__name__)
 
@@ -108,18 +106,10 @@ UMAP_KWARGS = {}  # extra umap.UMAP arguments, set by --umap-optimizer
 
 def load_bundle(model, input_type="difference", return_pairs=False):
     """Features in the paper's row order, plus pair type and Stuttgart split per row."""
-    data = load_unfiltered_pairs_for_model(model)
-    parts, labels, splits, all_pairs = [], [], [], []
-    for pair_type in PAIR_TYPES:
-        pairs, emb_pairs, _meta, split_labels = data[pair_type]
-        parts.append(build_features(emb_pairs, input_type).astype(np.float32))
-        labels.extend([pair_type] * len(pairs))
-        splits.extend(split_labels if split_labels else [""] * len(pairs))
-        all_pairs.extend(pairs)
-    X = StandardScaler().fit_transform(np.vstack(parts)).astype(np.float32)
+    bundle = load_paper_bundle(model, input_type)
     if return_pairs:
-        return X, np.array(labels), np.array(splits), all_pairs
-    return X, np.array(labels), np.array(splits)
+        return bundle["X"], bundle["labels"], bundle["splits"], bundle["pairs"]
+    return bundle["X"], bundle["labels"], bundle["splits"]
 
 
 # ---------------------------------------------------------------------------
